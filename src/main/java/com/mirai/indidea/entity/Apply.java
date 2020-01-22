@@ -1,17 +1,16 @@
-package com.mirai.indidea.domain;
+package com.mirai.indidea.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "report", schema = "indidea", catalog = "")
-public class ReportEntity {
+@Table(name = "apply", schema = "indidea", catalog = "")
+public class Apply {
     private int id;
-    private int reporterid;
-    private int projectid;
+    private int status;
     private Date createdat;
     private Date updatedat;
-    private int status;
+    private int userid;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -24,23 +23,13 @@ public class ReportEntity {
     }
 
     @Basic
-    @Column(name = "reporterid", nullable = false)
-    public int getReporterid() {
-        return reporterid;
+    @Column(name = "status", nullable = false)
+    public int getStatus() {
+        return status;
     }
 
-    public void setReporterid(int reporterid) {
-        this.reporterid = reporterid;
-    }
-
-    @Basic
-    @Column(name = "projectid", nullable = false)
-    public int getProjectid() {
-        return projectid;
-    }
-
-    public void setProjectid(int projectid) {
-        this.projectid = projectid;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Basic
@@ -64,13 +53,13 @@ public class ReportEntity {
     }
 
     @Basic
-    @Column(name = "status", nullable = false)
-    public int getStatus() {
-        return status;
+    @Column(name = "userid", nullable = false)
+    public int getUserid() {
+        return userid;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 
     @Override
@@ -78,12 +67,11 @@ public class ReportEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ReportEntity that = (ReportEntity) o;
+        Apply that = (Apply) o;
 
         if (id != that.id) return false;
-        if (reporterid != that.reporterid) return false;
-        if (projectid != that.projectid) return false;
         if (status != that.status) return false;
+        if (userid != that.userid) return false;
         if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
         if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
 
@@ -93,11 +81,10 @@ public class ReportEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + reporterid;
-        result = 31 * result + projectid;
+        result = 31 * result + status;
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);
-        result = 31 * result + status;
+        result = 31 * result + userid;
         return result;
     }
 }

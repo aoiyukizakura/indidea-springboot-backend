@@ -1,18 +1,19 @@
-package com.mirai.indidea.domain;
+package com.mirai.indidea.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "postcomment", schema = "indidea", catalog = "")
-public class PostcommentEntity {
+@Table(name = "point", schema = "indidea", catalog = "")
+public class Point {
     private int id;
-    private int userid;
-    private int postid;
-    private String comment;
     private Date createdat;
     private Date updatedat;
+    private int point;
     private int status;
+    private int userid;
+    private String serialnumber;
+    private String ordernumber;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -22,36 +23,6 @@ public class PostcommentEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
-    }
-
-    public void setUserid(int userid) {
-        this.userid = userid;
-    }
-
-    @Basic
-    @Column(name = "postid", nullable = false)
-    public int getPostid() {
-        return postid;
-    }
-
-    public void setPostid(int postid) {
-        this.postid = postid;
-    }
-
-    @Basic
-    @Column(name = "comment", nullable = false, length = 300)
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     @Basic
@@ -75,6 +46,16 @@ public class PostcommentEntity {
     }
 
     @Basic
+    @Column(name = "point", nullable = false)
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
+    @Basic
     @Column(name = "status", nullable = false)
     public int getStatus() {
         return status;
@@ -84,20 +65,51 @@ public class PostcommentEntity {
         this.status = status;
     }
 
+    @Basic
+    @Column(name = "userid", nullable = false)
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+
+    @Basic
+    @Column(name = "serialnumber", nullable = true, length = 50)
+    public String getSerialnumber() {
+        return serialnumber;
+    }
+
+    public void setSerialnumber(String serialnumber) {
+        this.serialnumber = serialnumber;
+    }
+
+    @Basic
+    @Column(name = "ordernumber", nullable = true, length = 50)
+    public String getOrdernumber() {
+        return ordernumber;
+    }
+
+    public void setOrdernumber(String ordernumber) {
+        this.ordernumber = ordernumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PostcommentEntity that = (PostcommentEntity) o;
+        Point that = (Point) o;
 
         if (id != that.id) return false;
-        if (userid != that.userid) return false;
-        if (postid != that.postid) return false;
+        if (point != that.point) return false;
         if (status != that.status) return false;
-        if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
+        if (userid != that.userid) return false;
         if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
         if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
+        if (serialnumber != null ? !serialnumber.equals(that.serialnumber) : that.serialnumber != null) return false;
+        if (ordernumber != null ? !ordernumber.equals(that.ordernumber) : that.ordernumber != null) return false;
 
         return true;
     }
@@ -105,12 +117,13 @@ public class PostcommentEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + userid;
-        result = 31 * result + postid;
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);
+        result = 31 * result + point;
         result = 31 * result + status;
+        result = 31 * result + userid;
+        result = 31 * result + (serialnumber != null ? serialnumber.hashCode() : 0);
+        result = 31 * result + (ordernumber != null ? ordernumber.hashCode() : 0);
         return result;
     }
 }

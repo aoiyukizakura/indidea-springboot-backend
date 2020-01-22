@@ -1,15 +1,11 @@
 package com.mirai.indidea.service.serviceImpl;
 
-import com.mirai.indidea.domain.UserEntity;
+import com.mirai.indidea.entity.User;
 
 public interface UserServiceImpl {
 
-    public UserEntity find(int id);
-
-    public boolean save(UserEntity userEntity);
-    /*
-     *  @param code => 1为更新，2为软删除
-     */
-    public boolean update(UserEntity userEntity, int code);
+    public User find(int id);
+    public User save(User user);
+    public boolean delete(int id);
 
 }

@@ -1,19 +1,18 @@
-package com.mirai.indidea.domain;
+package com.mirai.indidea.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "projectquz", schema = "indidea", catalog = "")
-public class ProjectquzEntity {
+@Table(name = "sponsor", schema = "indidea", catalog = "")
+public class Sponsor {
     private int id;
-    private int quserid;
+    private int sponsorid;
     private int projectid;
-    private String quzcontent;
-    private String ancontent;
-    private Integer auserid;
+    private int point;
     private Date createdat;
     private Date updatedat;
+    private Integer rewardid;
     private int status;
 
     @Id
@@ -27,13 +26,13 @@ public class ProjectquzEntity {
     }
 
     @Basic
-    @Column(name = "quserid", nullable = false)
-    public int getQuserid() {
-        return quserid;
+    @Column(name = "sponsorid", nullable = false)
+    public int getSponsorid() {
+        return sponsorid;
     }
 
-    public void setQuserid(int quserid) {
-        this.quserid = quserid;
+    public void setSponsorid(int sponsorid) {
+        this.sponsorid = sponsorid;
     }
 
     @Basic
@@ -47,33 +46,13 @@ public class ProjectquzEntity {
     }
 
     @Basic
-    @Column(name = "quzcontent", nullable = false, length = 125)
-    public String getQuzcontent() {
-        return quzcontent;
+    @Column(name = "point", nullable = false)
+    public int getPoint() {
+        return point;
     }
 
-    public void setQuzcontent(String quzcontent) {
-        this.quzcontent = quzcontent;
-    }
-
-    @Basic
-    @Column(name = "ancontent", nullable = true, length = 500)
-    public String getAncontent() {
-        return ancontent;
-    }
-
-    public void setAncontent(String ancontent) {
-        this.ancontent = ancontent;
-    }
-
-    @Basic
-    @Column(name = "auserid", nullable = true)
-    public Integer getAuserid() {
-        return auserid;
-    }
-
-    public void setAuserid(Integer auserid) {
-        this.auserid = auserid;
+    public void setPoint(int point) {
+        this.point = point;
     }
 
     @Basic
@@ -97,6 +76,16 @@ public class ProjectquzEntity {
     }
 
     @Basic
+    @Column(name = "rewardid", nullable = true)
+    public Integer getRewardid() {
+        return rewardid;
+    }
+
+    public void setRewardid(Integer rewardid) {
+        this.rewardid = rewardid;
+    }
+
+    @Basic
     @Column(name = "status", nullable = false)
     public int getStatus() {
         return status;
@@ -111,17 +100,16 @@ public class ProjectquzEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProjectquzEntity that = (ProjectquzEntity) o;
+        Sponsor that = (Sponsor) o;
 
         if (id != that.id) return false;
-        if (quserid != that.quserid) return false;
+        if (sponsorid != that.sponsorid) return false;
         if (projectid != that.projectid) return false;
+        if (point != that.point) return false;
         if (status != that.status) return false;
-        if (quzcontent != null ? !quzcontent.equals(that.quzcontent) : that.quzcontent != null) return false;
-        if (ancontent != null ? !ancontent.equals(that.ancontent) : that.ancontent != null) return false;
-        if (auserid != null ? !auserid.equals(that.auserid) : that.auserid != null) return false;
         if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
         if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
+        if (rewardid != null ? !rewardid.equals(that.rewardid) : that.rewardid != null) return false;
 
         return true;
     }
@@ -129,13 +117,12 @@ public class ProjectquzEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + quserid;
+        result = 31 * result + sponsorid;
         result = 31 * result + projectid;
-        result = 31 * result + (quzcontent != null ? quzcontent.hashCode() : 0);
-        result = 31 * result + (ancontent != null ? ancontent.hashCode() : 0);
-        result = 31 * result + (auserid != null ? auserid.hashCode() : 0);
+        result = 31 * result + point;
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);
+        result = 31 * result + (rewardid != null ? rewardid.hashCode() : 0);
         result = 31 * result + status;
         return result;
     }

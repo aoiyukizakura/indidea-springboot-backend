@@ -1,18 +1,17 @@
-package com.mirai.indidea.domain;
+package com.mirai.indidea.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "sponsor", schema = "indidea", catalog = "")
-public class SponsorEntity {
+@Table(name = "msgboard", schema = "indidea", catalog = "")
+public class Msgboard {
     private int id;
-    private int sponsorid;
+    private int userid;
     private int projectid;
-    private int point;
+    private String content;
     private Date createdat;
     private Date updatedat;
-    private Integer rewardid;
     private int status;
 
     @Id
@@ -26,13 +25,13 @@ public class SponsorEntity {
     }
 
     @Basic
-    @Column(name = "sponsorid", nullable = false)
-    public int getSponsorid() {
-        return sponsorid;
+    @Column(name = "userid", nullable = false)
+    public int getUserid() {
+        return userid;
     }
 
-    public void setSponsorid(int sponsorid) {
-        this.sponsorid = sponsorid;
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 
     @Basic
@@ -46,13 +45,13 @@ public class SponsorEntity {
     }
 
     @Basic
-    @Column(name = "point", nullable = false)
-    public int getPoint() {
-        return point;
+    @Column(name = "content", nullable = false, length = 300)
+    public String getContent() {
+        return content;
     }
 
-    public void setPoint(int point) {
-        this.point = point;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Basic
@@ -76,16 +75,6 @@ public class SponsorEntity {
     }
 
     @Basic
-    @Column(name = "rewardid", nullable = true)
-    public Integer getRewardid() {
-        return rewardid;
-    }
-
-    public void setRewardid(Integer rewardid) {
-        this.rewardid = rewardid;
-    }
-
-    @Basic
     @Column(name = "status", nullable = false)
     public int getStatus() {
         return status;
@@ -100,16 +89,15 @@ public class SponsorEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SponsorEntity that = (SponsorEntity) o;
+        Msgboard that = (Msgboard) o;
 
         if (id != that.id) return false;
-        if (sponsorid != that.sponsorid) return false;
+        if (userid != that.userid) return false;
         if (projectid != that.projectid) return false;
-        if (point != that.point) return false;
         if (status != that.status) return false;
+        if (content != null ? !content.equals(that.content) : that.content != null) return false;
         if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
         if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
-        if (rewardid != null ? !rewardid.equals(that.rewardid) : that.rewardid != null) return false;
 
         return true;
     }
@@ -117,12 +105,11 @@ public class SponsorEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + sponsorid;
+        result = 31 * result + userid;
         result = 31 * result + projectid;
-        result = 31 * result + point;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);
-        result = 31 * result + (rewardid != null ? rewardid.hashCode() : 0);
         result = 31 * result + status;
         return result;
     }

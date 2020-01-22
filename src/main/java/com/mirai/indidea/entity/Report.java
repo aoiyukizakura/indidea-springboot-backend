@@ -1,18 +1,17 @@
-package com.mirai.indidea.domain;
+package com.mirai.indidea.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "post", schema = "indidea", catalog = "")
-public class PostEntity {
+@Table(name = "report", schema = "indidea", catalog = "")
+public class Report {
     private int id;
-    private int userid;
-    private String content;
+    private int reporterid;
+    private int projectid;
     private Date createdat;
     private Date updatedat;
-    private Integer status;
-    private String cover;
+    private int status;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -25,23 +24,23 @@ public class PostEntity {
     }
 
     @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
+    @Column(name = "reporterid", nullable = false)
+    public int getReporterid() {
+        return reporterid;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setReporterid(int reporterid) {
+        this.reporterid = reporterid;
     }
 
     @Basic
-    @Column(name = "content", nullable = false, length = -1)
-    public String getContent() {
-        return content;
+    @Column(name = "projectid", nullable = false)
+    public int getProjectid() {
+        return projectid;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setProjectid(int projectid) {
+        this.projectid = projectid;
     }
 
     @Basic
@@ -65,23 +64,13 @@ public class PostEntity {
     }
 
     @Basic
-    @Column(name = "status", nullable = true)
-    public Integer getStatus() {
+    @Column(name = "status", nullable = false)
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(int status) {
         this.status = status;
-    }
-
-    @Basic
-    @Column(name = "cover", nullable = true, length = 100)
-    public String getCover() {
-        return cover;
-    }
-
-    public void setCover(String cover) {
-        this.cover = cover;
     }
 
     @Override
@@ -89,15 +78,14 @@ public class PostEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PostEntity that = (PostEntity) o;
+        Report that = (Report) o;
 
         if (id != that.id) return false;
-        if (userid != that.userid) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
+        if (reporterid != that.reporterid) return false;
+        if (projectid != that.projectid) return false;
+        if (status != that.status) return false;
         if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
         if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-        if (cover != null ? !cover.equals(that.cover) : that.cover != null) return false;
 
         return true;
     }
@@ -105,12 +93,11 @@ public class PostEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + userid;
-        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + reporterid;
+        result = 31 * result + projectid;
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (cover != null ? cover.hashCode() : 0);
+        result = 31 * result + status;
         return result;
     }
 }

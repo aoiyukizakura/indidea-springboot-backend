@@ -1,11 +1,11 @@
-package com.mirai.indidea.domain;
+package com.mirai.indidea.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
 @Table(name = "user", schema = "indidea", catalog = "")
-public class UserEntity {
+public class User {
     private int id;
     private String username;
     private String password;
@@ -155,7 +155,7 @@ public class UserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserEntity that = (UserEntity) o;
+        User that = (User) o;
 
         if (id != that.id) return false;
         if (status != that.status) return false;

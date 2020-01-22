@@ -1,10 +1,10 @@
-package com.mirai.indidea.domain;
+package com.mirai.indidea.entity;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "category", schema = "indidea", catalog = "")
-public class CategoryEntity {
+public class Category {
     private int id;
     private String name;
     private String des;
@@ -44,7 +44,7 @@ public class CategoryEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CategoryEntity that = (CategoryEntity) o;
+        Category that = (Category) o;
 
         if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;

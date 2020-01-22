@@ -1,16 +1,18 @@
-package com.mirai.indidea.domain;
+package com.mirai.indidea.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "apply", schema = "indidea", catalog = "")
-public class ApplyEntity {
+@Table(name = "postcomment", schema = "indidea", catalog = "")
+public class Postcomment {
     private int id;
-    private int status;
+    private int userid;
+    private int postid;
+    private String comment;
     private Date createdat;
     private Date updatedat;
-    private int userid;
+    private int status;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -23,13 +25,33 @@ public class ApplyEntity {
     }
 
     @Basic
-    @Column(name = "status", nullable = false)
-    public int getStatus() {
-        return status;
+    @Column(name = "userid", nullable = false)
+    public int getUserid() {
+        return userid;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+
+    @Basic
+    @Column(name = "postid", nullable = false)
+    public int getPostid() {
+        return postid;
+    }
+
+    public void setPostid(int postid) {
+        this.postid = postid;
+    }
+
+    @Basic
+    @Column(name = "comment", nullable = false, length = 300)
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     @Basic
@@ -53,13 +75,13 @@ public class ApplyEntity {
     }
 
     @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
+    @Column(name = "status", nullable = false)
+    public int getStatus() {
+        return status;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override
@@ -67,11 +89,13 @@ public class ApplyEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ApplyEntity that = (ApplyEntity) o;
+        Postcomment that = (Postcomment) o;
 
         if (id != that.id) return false;
-        if (status != that.status) return false;
         if (userid != that.userid) return false;
+        if (postid != that.postid) return false;
+        if (status != that.status) return false;
+        if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
         if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
         if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
 
@@ -81,10 +105,12 @@ public class ApplyEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + status;
+        result = 31 * result + userid;
+        result = 31 * result + postid;
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);
-        result = 31 * result + userid;
+        result = 31 * result + status;
         return result;
     }
 }

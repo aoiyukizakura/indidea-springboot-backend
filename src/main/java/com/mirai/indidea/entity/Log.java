@@ -1,11 +1,11 @@
-package com.mirai.indidea.domain;
+package com.mirai.indidea.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
 @Table(name = "log", schema = "indidea", catalog = "")
-public class LogEntity {
+public class Log {
     private int id;
     private String title;
     private String content;
@@ -111,17 +111,17 @@ public class LogEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LogEntity logEntity = (LogEntity) o;
+        Log log = (Log) o;
 
-        if (id != logEntity.id) return false;
-        if (userid != logEntity.userid) return false;
-        if (projectid != logEntity.projectid) return false;
-        if (status != logEntity.status) return false;
-        if (title != null ? !title.equals(logEntity.title) : logEntity.title != null) return false;
-        if (content != null ? !content.equals(logEntity.content) : logEntity.content != null) return false;
-        if (number != null ? !number.equals(logEntity.number) : logEntity.number != null) return false;
-        if (createdat != null ? !createdat.equals(logEntity.createdat) : logEntity.createdat != null) return false;
-        if (updatedat != null ? !updatedat.equals(logEntity.updatedat) : logEntity.updatedat != null) return false;
+        if (id != log.id) return false;
+        if (userid != log.userid) return false;
+        if (projectid != log.projectid) return false;
+        if (status != log.status) return false;
+        if (title != null ? !title.equals(log.title) : log.title != null) return false;
+        if (content != null ? !content.equals(log.content) : log.content != null) return false;
+        if (number != null ? !number.equals(log.number) : log.number != null) return false;
+        if (createdat != null ? !createdat.equals(log.createdat) : log.createdat != null) return false;
+        if (updatedat != null ? !updatedat.equals(log.updatedat) : log.updatedat != null) return false;
 
         return true;
     }

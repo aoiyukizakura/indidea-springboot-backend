@@ -1,11 +1,11 @@
-package com.mirai.indidea.domain;
+package com.mirai.indidea.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
 @Table(name = "project", schema = "indidea", catalog = "")
-public class ProjectEntity {
+public class Project {
     private int id;
     private String title;
     private String subtitle;
@@ -199,7 +199,7 @@ public class ProjectEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProjectEntity that = (ProjectEntity) o;
+        Project that = (Project) o;
 
         if (id != that.id) return false;
         if (userid != that.userid) return false;
