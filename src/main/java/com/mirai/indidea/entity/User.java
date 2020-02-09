@@ -1,20 +1,25 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "user", schema = "indidea", catalog = "")
 public class User {
     private int id;
     private String username;
     private String password;
     private String email;
-    private Integer balance;
+    private Integer balance = 0;
     private String website;
     private String address;
     private String des;
-    private int status;
+    private int status = 1;
     private Date createdat;
     private Date updatedat;
     private String vanityname;
@@ -112,6 +117,7 @@ public class User {
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -122,6 +128,7 @@ public class User {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
