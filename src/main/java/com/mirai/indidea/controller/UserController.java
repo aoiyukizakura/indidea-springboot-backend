@@ -5,10 +5,12 @@ import com.mirai.indidea.dto.Userdto.LoginDto;
 import com.mirai.indidea.dto.Userdto.UserRegisterDto;
 import com.mirai.indidea.dto.Userdto.UserUpdateDto;
 import com.mirai.indidea.entity.User;
+import com.mirai.indidea.service.UploadService;
 import com.mirai.indidea.service.UserService;
 import com.mirai.indidea.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -18,6 +20,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UploadService uploadService;
+
 
     /**
      * 查询单个用户
@@ -83,9 +89,13 @@ public class UserController {
     }
 
     @PostMapping("/avatar")
-    public boolean uploadAvatar() {
-
-        return false;
+    public ResultDto<Object> uploadAvatar(@RequestParam("avatar") MultipartFile file) {
+        String fileName = uploadService.Upload(file);
+        if (fileName == null) {
+            return ResultUtil.Result(200, "上传失败", null);
+        } else {
+            return ResultUtil.Result(200, "上传成功", fileName);
+        }
     }
 
     /**
