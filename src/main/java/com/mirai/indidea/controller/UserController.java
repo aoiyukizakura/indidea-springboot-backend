@@ -45,7 +45,7 @@ public class UserController {
         if( u != null ){
             return ResultUtil.Result(200,"登录成功", u);
         } else {
-            return ResultUtil.Result(200,"登陆失败，请检查邮箱和密码是否正确", null);
+            return ResultUtil.Result(200,"登陆失败，请检查邮箱和密码是否正确", false);
         }
     }
 
@@ -59,7 +59,7 @@ public class UserController {
         if( userService.save(userRegisterDto) ) {
             return ResultUtil.Result(200, "注册成功", true);
         } else {
-            return ResultUtil.Result(200, "注册失败，邮箱已注册",null);
+            return ResultUtil.Result(200, "注册失败，邮箱已注册",false);
         }
     }
 
@@ -70,7 +70,22 @@ public class UserController {
      */
     @PutMapping("/edit")
     public ResultDto<Object> edit(@Valid @RequestBody UserUpdateDto userUpdateDto) {
-        return null;
+        if( userService.update(userUpdateDto) ) {
+            return ResultUtil.Result(200, "更新成功", true);
+        } else {
+            return ResultUtil.Result(200, "修改失败", false);
+        }
+    }
+
+    @PutMapping("/changePassword")
+    public boolean changePassword(@RequestParam("id") int id, @RequestParam("password") String password) {
+        return userService.changePassword(id, password);
+    }
+
+    @PostMapping("/avatar")
+    public boolean uploadAvatar() {
+
+        return false;
     }
 
     /**

@@ -8,6 +8,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     User findUserById(int id);
     User findUserByEmailAndPassword(String email, String password);
     User findUserByEmail(String email);
-
 //    public User
 }
