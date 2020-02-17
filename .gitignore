@@ -1,9 +1,10 @@
 HELP.md
 .gradle
 build/
-src/main/resources/static/uploads/**
+src/main/resources/static/uploads/
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**
+!**/src/main/java/**
+!**/src/main/resources/**.yml
 !**/src/test/**
 
 ### STS ###
