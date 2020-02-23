@@ -6,14 +6,13 @@ import com.mirai.indidea.dto.Userdto.UserRegisterDto;
 import com.mirai.indidea.dto.Userdto.UserUpdateDto;
 import com.mirai.indidea.entity.User;
 import com.mirai.indidea.service.UserService;
-import com.mirai.indidea.utils.MD5Util;
+import com.mirai.indidea.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.Valid;
-import java.util.Date;
 
 
 @Service
@@ -41,10 +40,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User login(LoginDto logindto) {
+        System.out.println(logindto);
         return userRepository
                 .findUserByEmailAndPassword(
                 logindto.getEmail(),
-                MD5Util.crypt(logindto.getPassword())
+                MD5Utils.crypt(logindto.getPassword())
         );
     }
 
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findUserByEmail(userRegisterDto.getEmail()) == null) {
             User user = new User();
             user.setUsername(userRegisterDto.getUsername());
-            user.setPassword(MD5Util.crypt(userRegisterDto.getPassword()));
+            user.setPassword(MD5Utils.crypt(userRegisterDto.getPassword()));
             user.setEmail(userRegisterDto.getEmail());
             userRepository.saveAndFlush(user);
             return true;
@@ -74,8 +74,8 @@ public class UserServiceImpl implements UserService {
      * @return boolean
      */
     @Override
-    public boolean update(@Valid UserUpdateDto userUpdateDto) {
-        User u = userRepository.findUserById(userUpdateDto.getId());
+    public boolean update(@Valid UserUpdateDto userUpdateDto, int id) {
+        User u = userRepository.findUserById(id);
         if (userUpdateDto.getUsername() != null)
             u.setUsername(userUpdateDto.getUsername());
         if (userUpdateDto.getWebsite() != null)
@@ -84,6 +84,10 @@ public class UserServiceImpl implements UserService {
             u.setAddress(userUpdateDto.getAddress());
         if (userUpdateDto.getDes() != null)
             u.setDes(userUpdateDto.getDes());
+        if (userUpdateDto.getAvatar() != null)
+            u.setAvatar(userUpdateDto.getAvatar());
+        if (userUpdateDto.getPassword() != null)
+            u.setPassword(MD5Utils.crypt(userUpdateDto.getPassword()));
         userRepository.saveAndFlush(u);
         return true;
     }
@@ -94,7 +98,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean changePassword(int id, String password) {
         User u = userRepository.findUserById(id);
-        u.setPassword(MD5Util.crypt(password));
+        u.setPassword(MD5Utils.crypt(password));
         userRepository.saveAndFlush(u);
         return true;
     }

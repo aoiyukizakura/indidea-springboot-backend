@@ -13,7 +13,7 @@ public interface UserService {
     User login(LoginDto logindto);
     boolean save(@Valid UserRegisterDto userRegisterDto);
     boolean delete(int id);
-    boolean update(@Valid UserUpdateDto userUpdateDto);
+    boolean update(@Valid UserUpdateDto userUpdateDto, int id);
     boolean changePassword(int id, String password);
 }
 

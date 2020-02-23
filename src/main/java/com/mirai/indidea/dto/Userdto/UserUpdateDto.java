@@ -4,18 +4,27 @@ import lombok.Data;
 
 @Data
 public class UserUpdateDto {
-    private int id;
     private String username;
     private String website;
     private String address;
     private String des;
+    private String avatar;
+    private String password;
 
-    public int getId() {
-        return id;
+    public String getPassword() {
+        return password;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getUsername() {

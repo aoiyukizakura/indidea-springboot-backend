@@ -3,7 +3,7 @@ package com.mirai.indidea.utils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class MD5Util {
+public class MD5Utils {
 
     /**
      * Encodes a string 2 MD5
