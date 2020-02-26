@@ -1,21 +1,27 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "sponsor", schema = "indidea", catalog = "")
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "apply", schema = "indidea", catalog = "")
 public class Sponsor {
     private int id;
-    private int sponsorid;
-    private int projectid;
+    private User sponsor;
+    private Project project;
     private int point;
     private Date createdat;
     private Date updatedat;
-    private Integer rewardid;
-    private int status;
+    private Reward reward;
+    private int status = 1;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -25,24 +31,22 @@ public class Sponsor {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "sponsorid", nullable = false)
-    public int getSponsorid() {
-        return sponsorid;
+    @ManyToOne
+    public User getSponsor() {
+        return sponsor;
     }
 
-    public void setSponsorid(int sponsorid) {
-        this.sponsorid = sponsorid;
+    public void setSponsor(User sponsor) {
+        this.sponsor = sponsor;
     }
 
-    @Basic
-    @Column(name = "projectid", nullable = false)
-    public int getProjectid() {
-        return projectid;
+    @ManyToOne
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectid(int projectid) {
-        this.projectid = projectid;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Basic
@@ -57,6 +61,7 @@ public class Sponsor {
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -67,6 +72,7 @@ public class Sponsor {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
@@ -75,14 +81,13 @@ public class Sponsor {
         this.updatedat = updatedat;
     }
 
-    @Basic
-    @Column(name = "rewardid", nullable = true)
-    public Integer getRewardid() {
-        return rewardid;
+    @OneToOne
+    public Reward getReward() {
+        return reward;
     }
 
-    public void setRewardid(Integer rewardid) {
-        this.rewardid = rewardid;
+    public void setReward(Reward reward) {
+        this.reward = reward;
     }
 
     @Basic
@@ -100,16 +105,16 @@ public class Sponsor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Sponsor that = (Sponsor) o;
+        Sponsor sponsor = (Sponsor) o;
 
-        if (id != that.id) return false;
-        if (sponsorid != that.sponsorid) return false;
-        if (projectid != that.projectid) return false;
-        if (point != that.point) return false;
-        if (status != that.status) return false;
-        if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
-        if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
-        if (rewardid != null ? !rewardid.equals(that.rewardid) : that.rewardid != null) return false;
+        if (id != sponsor.id) return false;
+        if (this.sponsor != sponsor.sponsor) return false;
+        if (project != sponsor.project) return false;
+        if (point != sponsor.point) return false;
+        if (status != sponsor.status) return false;
+        if (createdat != null ? !createdat.equals(sponsor.createdat) : sponsor.createdat != null) return false;
+        if (updatedat != null ? !updatedat.equals(sponsor.updatedat) : sponsor.updatedat != null) return false;
+        if (reward != null ? !reward.equals(sponsor.reward) : sponsor.reward != null) return false;
 
         return true;
     }
@@ -117,12 +122,12 @@ public class Sponsor {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + sponsorid;
-        result = 31 * result + projectid;
+        result = 31 * result + (sponsor != null ? sponsor.hashCode() : 0);
+        result = 31 * result + (project != null ? project.hashCode() : 0);
         result = 31 * result + point;
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);
-        result = 31 * result + (rewardid != null ? rewardid.hashCode() : 0);
+        result = 31 * result + (reward != null ? reward.hashCode() : 0);
         result = 31 * result + status;
         return result;
     }

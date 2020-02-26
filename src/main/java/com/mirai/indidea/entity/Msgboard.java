@@ -1,20 +1,26 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "msgboard", schema = "indidea", catalog = "")
 public class Msgboard {
     private int id;
-    private int userid;
-    private int projectid;
+    private User user;
+    private Project project;
     private String content;
     private Date createdat;
     private Date updatedat;
     private int status;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -24,24 +30,22 @@ public class Msgboard {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
+    @ManyToOne
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    @Basic
-    @Column(name = "projectid", nullable = false)
-    public int getProjectid() {
-        return projectid;
+    @ManyToOne
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectid(int projectid) {
-        this.projectid = projectid;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Basic
@@ -56,6 +60,7 @@ public class Msgboard {
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -66,6 +71,7 @@ public class Msgboard {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
@@ -89,15 +95,15 @@ public class Msgboard {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Msgboard that = (Msgboard) o;
+        Msgboard msgboard = (Msgboard) o;
 
-        if (id != that.id) return false;
-        if (userid != that.userid) return false;
-        if (projectid != that.projectid) return false;
-        if (status != that.status) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
-        if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
+        if (id != msgboard.id) return false;
+        if (user != msgboard.user) return false;
+        if (project != msgboard.project) return false;
+        if (status != msgboard.status) return false;
+        if (content != null ? !content.equals(msgboard.content) : msgboard.content != null) return false;
+        if (createdat != null ? !createdat.equals(msgboard.createdat) : msgboard.createdat != null) return false;
+        if (updatedat != null ? !updatedat.equals(msgboard.updatedat) : msgboard.updatedat != null) return false;
 
         return true;
     }
@@ -105,8 +111,8 @@ public class Msgboard {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + userid;
-        result = 31 * result + projectid;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (project != null ? project.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);

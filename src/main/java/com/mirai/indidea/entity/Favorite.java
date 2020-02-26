@@ -1,19 +1,25 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "favorite", schema = "indidea", catalog = "")
 public class Favorite {
     private int id;
-    private int userid;
-    private int projectid;
+    private User user;
+    private Project project;
     private Date createdat;
     private Date updatedat;
-    private int status;
+    private int status = 1;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -23,28 +29,27 @@ public class Favorite {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
+    @ManyToOne
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    @Basic
-    @Column(name = "projectid", nullable = false)
-    public int getProjectid() {
-        return projectid;
+    @ManyToOne
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectid(int projectid) {
-        this.projectid = projectid;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -55,6 +60,7 @@ public class Favorite {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
@@ -78,14 +84,14 @@ public class Favorite {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Favorite that = (Favorite) o;
+        Favorite favorite = (Favorite) o;
 
-        if (id != that.id) return false;
-        if (userid != that.userid) return false;
-        if (projectid != that.projectid) return false;
-        if (status != that.status) return false;
-        if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
-        if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
+        if (id != favorite.id) return false;
+        if (user != favorite.user) return false;
+        if (project != favorite.project) return false;
+        if (status != favorite.status) return false;
+        if (createdat != null ? !createdat.equals(favorite.createdat) : favorite.createdat != null) return false;
+        if (updatedat != null ? !updatedat.equals(favorite.updatedat) : favorite.updatedat != null) return false;
 
         return true;
     }
@@ -93,8 +99,8 @@ public class Favorite {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + userid;
-        result = 31 * result + projectid;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (project != null ? project.hashCode() : 0);
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);
         result = 31 * result + status;

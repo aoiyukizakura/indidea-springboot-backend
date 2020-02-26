@@ -1,19 +1,25 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "postlike", schema = "indidea", catalog = "")
 public class Postlike {
     private int id;
-    private int postid;
-    private int userid;
-    private int status;
+    private Post post;
+    private User user;
+    private int status = 1;
     private Date createdat;
     private Date updatedat;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -23,24 +29,22 @@ public class Postlike {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "postid", nullable = false)
-    public int getPostid() {
-        return postid;
+    @ManyToOne
+    public Post getPost() {
+        return post;
     }
 
-    public void setPostid(int postid) {
-        this.postid = postid;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
-    @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
+    @ManyToOne
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Basic
@@ -55,6 +59,7 @@ public class Postlike {
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -65,6 +70,7 @@ public class Postlike {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
@@ -78,14 +84,14 @@ public class Postlike {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Postlike that = (Postlike) o;
+        Postlike postlike = (Postlike) o;
 
-        if (id != that.id) return false;
-        if (postid != that.postid) return false;
-        if (userid != that.userid) return false;
-        if (status != that.status) return false;
-        if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
-        if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
+        if (id != postlike.id) return false;
+        if (post != postlike.post) return false;
+        if (user != postlike.user) return false;
+        if (status != postlike.status) return false;
+        if (createdat != null ? !createdat.equals(postlike.createdat) : postlike.createdat != null) return false;
+        if (updatedat != null ? !updatedat.equals(postlike.updatedat) : postlike.updatedat != null) return false;
 
         return true;
     }
@@ -93,8 +99,8 @@ public class Postlike {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + postid;
-        result = 31 * result + userid;
+        result = 31 * result + (post != null ? post.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + status;
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);

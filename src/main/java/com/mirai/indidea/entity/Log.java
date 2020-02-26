@@ -1,22 +1,27 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "log", schema = "indidea", catalog = "")
 public class Log {
     private int id;
     private String title;
     private String content;
-    private int userid;
-    private int projectid;
+    private Project project;
     private Integer number;
-    private int status;
+    private int status = 1;
     private Date createdat;
     private Date updatedat;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -46,24 +51,13 @@ public class Log {
         this.content = content;
     }
 
-    @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
+    @ManyToOne
+    public Project getProject() {
+        return project;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
-    }
-
-    @Basic
-    @Column(name = "projectid", nullable = false)
-    public int getProjectid() {
-        return projectid;
-    }
-
-    public void setProjectid(int projectid) {
-        this.projectid = projectid;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Basic
@@ -88,6 +82,7 @@ public class Log {
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -98,6 +93,7 @@ public class Log {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
@@ -114,8 +110,7 @@ public class Log {
         Log log = (Log) o;
 
         if (id != log.id) return false;
-        if (userid != log.userid) return false;
-        if (projectid != log.projectid) return false;
+        if (project != log.project) return false;
         if (status != log.status) return false;
         if (title != null ? !title.equals(log.title) : log.title != null) return false;
         if (content != null ? !content.equals(log.content) : log.content != null) return false;
@@ -131,8 +126,7 @@ public class Log {
         int result = id;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + userid;
-        result = 31 * result + projectid;
+        result = 31 * result + (project != null ? project.hashCode() : 0);
         result = 31 * result + (number != null ? number.hashCode() : 0);
         result = 31 * result + status;
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);

@@ -1,20 +1,26 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "postcomment", schema = "indidea", catalog = "")
 public class Postcomment {
     private int id;
-    private int userid;
-    private int postid;
+    private User user;
+    private Post post;
     private String comment;
     private Date createdat;
     private Date updatedat;
-    private int status;
+    private int status = 1;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -24,24 +30,22 @@ public class Postcomment {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
+    @ManyToOne
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    @Basic
-    @Column(name = "postid", nullable = false)
-    public int getPostid() {
-        return postid;
+    @ManyToOne
+    public Post getPost() {
+        return post;
     }
 
-    public void setPostid(int postid) {
-        this.postid = postid;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     @Basic
@@ -56,6 +60,7 @@ public class Postcomment {
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -66,6 +71,7 @@ public class Postcomment {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
@@ -92,8 +98,8 @@ public class Postcomment {
         Postcomment that = (Postcomment) o;
 
         if (id != that.id) return false;
-        if (userid != that.userid) return false;
-        if (postid != that.postid) return false;
+        if (user != that.user) return false;
+        if (post != that.post) return false;
         if (status != that.status) return false;
         if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
         if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
@@ -105,8 +111,8 @@ public class Postcomment {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + userid;
-        result = 31 * result + postid;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (post != null ? post.hashCode() : 0);
         result = 31 * result + (comment != null ? comment.hashCode() : 0);
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);

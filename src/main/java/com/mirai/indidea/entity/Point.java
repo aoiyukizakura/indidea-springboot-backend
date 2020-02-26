@@ -1,21 +1,27 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "point", schema = "indidea", catalog = "")
 public class Point {
     private int id;
     private Date createdat;
     private Date updatedat;
     private int point;
-    private int status;
-    private int userid;
+    private int status = 1;
+    private User user;
     private String serialnumber;
     private String ordernumber;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -27,6 +33,7 @@ public class Point {
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -37,6 +44,7 @@ public class Point {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
@@ -65,14 +73,13 @@ public class Point {
         this.status = status;
     }
 
-    @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
+    @ManyToOne
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Basic
@@ -100,16 +107,17 @@ public class Point {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Point that = (Point) o;
+        Point point1 = (Point) o;
 
-        if (id != that.id) return false;
-        if (point != that.point) return false;
-        if (status != that.status) return false;
-        if (userid != that.userid) return false;
-        if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
-        if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
-        if (serialnumber != null ? !serialnumber.equals(that.serialnumber) : that.serialnumber != null) return false;
-        if (ordernumber != null ? !ordernumber.equals(that.ordernumber) : that.ordernumber != null) return false;
+        if (id != point1.id) return false;
+        if (point != point1.point) return false;
+        if (status != point1.status) return false;
+        if (user != point1.user) return false;
+        if (createdat != null ? !createdat.equals(point1.createdat) : point1.createdat != null) return false;
+        if (updatedat != null ? !updatedat.equals(point1.updatedat) : point1.updatedat != null) return false;
+        if (serialnumber != null ? !serialnumber.equals(point1.serialnumber) : point1.serialnumber != null)
+            return false;
+        if (ordernumber != null ? !ordernumber.equals(point1.ordernumber) : point1.ordernumber != null) return false;
 
         return true;
     }
@@ -121,7 +129,7 @@ public class Point {
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);
         result = 31 * result + point;
         result = 31 * result + status;
-        result = 31 * result + userid;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (serialnumber != null ? serialnumber.hashCode() : 0);
         result = 31 * result + (ordernumber != null ? ordernumber.hashCode() : 0);
         return result;

@@ -1,20 +1,26 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "post", schema = "indidea", catalog = "")
 public class Post {
     private int id;
-    private int userid;
+    private User user;
     private String content;
     private Date createdat;
     private Date updatedat;
-    private Integer status;
+    private Integer status = 1;
     private String cover;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -24,14 +30,13 @@ public class Post {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
+    @ManyToOne
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Basic
@@ -46,6 +51,7 @@ public class Post {
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -56,6 +62,7 @@ public class Post {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
@@ -89,15 +96,15 @@ public class Post {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Post that = (Post) o;
+        Post post = (Post) o;
 
-        if (id != that.id) return false;
-        if (userid != that.userid) return false;
-        if (content != null ? !content.equals(that.content) : that.content != null) return false;
-        if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
-        if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-        if (cover != null ? !cover.equals(that.cover) : that.cover != null) return false;
+        if (id != post.id) return false;
+        if (user != post.user) return false;
+        if (content != null ? !content.equals(post.content) : post.content != null) return false;
+        if (createdat != null ? !createdat.equals(post.createdat) : post.createdat != null) return false;
+        if (updatedat != null ? !updatedat.equals(post.updatedat) : post.updatedat != null) return false;
+        if (status != null ? !status.equals(post.status) : post.status != null) return false;
+        if (cover != null ? !cover.equals(post.cover) : post.cover != null) return false;
 
         return true;
     }
@@ -105,7 +112,7 @@ public class Post {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + userid;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);

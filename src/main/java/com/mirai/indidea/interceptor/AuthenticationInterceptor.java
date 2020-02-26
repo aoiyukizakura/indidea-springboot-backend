@@ -52,7 +52,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 try {
 //                    userId = JWT.decode(token).getAudience().get(0);
                     userId = JWT.decode(token).getClaims().get("userId").asInt();
-                    System.out.println(userId);
+//                    System.out.println(userId);
 
                 } catch (JWTDecodeException j) {
                     throw new RuntimeException("401 Unauthorized");

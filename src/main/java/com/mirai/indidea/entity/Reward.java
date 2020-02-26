@@ -1,20 +1,25 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "reward", schema = "indidea", catalog = "")
 public class Reward {
     private int id;
     private String name;
-    private int status;
+    private int status = 0;
     private Integer point;
     private String des;
     private Date expected;
     private String items;
+    private Project project;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -84,20 +89,30 @@ public class Reward {
         this.items = items;
     }
 
+    @ManyToOne
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Reward that = (Reward) o;
+        Reward reward = (Reward) o;
 
-        if (id != that.id) return false;
-        if (status != that.status) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (point != null ? !point.equals(that.point) : that.point != null) return false;
-        if (des != null ? !des.equals(that.des) : that.des != null) return false;
-        if (expected != null ? !expected.equals(that.expected) : that.expected != null) return false;
-        if (items != null ? !items.equals(that.items) : that.items != null) return false;
+        if (id != reward.id) return false;
+        if (status != reward.status) return false;
+        if (project != reward.project) return false;
+        if (name != null ? !name.equals(reward.name) : reward.name != null) return false;
+        if (point != null ? !point.equals(reward.point) : reward.point != null) return false;
+        if (des != null ? !des.equals(reward.des) : reward.des != null) return false;
+        if (expected != null ? !expected.equals(reward.expected) : reward.expected != null) return false;
+        if (items != null ? !items.equals(reward.items) : reward.items != null) return false;
 
         return true;
     }
@@ -111,6 +126,7 @@ public class Reward {
         result = 31 * result + (des != null ? des.hashCode() : 0);
         result = 31 * result + (expected != null ? expected.hashCode() : 0);
         result = 31 * result + (items != null ? items.hashCode() : 0);
+        result = 31 * result + (project != null ? project.hashCode() : 0);
         return result;
     }
 }

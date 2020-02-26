@@ -1,22 +1,27 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "projectquz", schema = "indidea", catalog = "")
 public class Projectquz {
     private int id;
-    private int quserid;
-    private int projectid;
+    private User quser;
+    private Project project;
     private String quzcontent;
     private String ancontent;
-    private Integer auserid;
     private Date createdat;
     private Date updatedat;
-    private int status;
+    private int status = 1;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -26,24 +31,22 @@ public class Projectquz {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "quserid", nullable = false)
-    public int getQuserid() {
-        return quserid;
+    @ManyToOne
+    public User getQuser() {
+        return quser;
     }
 
-    public void setQuserid(int quserid) {
-        this.quserid = quserid;
+    public void setQuser(User quser) {
+        this.quser = quser;
     }
 
-    @Basic
-    @Column(name = "projectid", nullable = false)
-    public int getProjectid() {
-        return projectid;
+    @ManyToOne
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectid(int projectid) {
-        this.projectid = projectid;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Basic
@@ -66,18 +69,10 @@ public class Projectquz {
         this.ancontent = ancontent;
     }
 
-    @Basic
-    @Column(name = "auserid", nullable = true)
-    public Integer getAuserid() {
-        return auserid;
-    }
-
-    public void setAuserid(Integer auserid) {
-        this.auserid = auserid;
-    }
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -88,6 +83,7 @@ public class Projectquz {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
@@ -114,12 +110,11 @@ public class Projectquz {
         Projectquz that = (Projectquz) o;
 
         if (id != that.id) return false;
-        if (quserid != that.quserid) return false;
-        if (projectid != that.projectid) return false;
+        if (quser != that.quser) return false;
+        if (project != that.project) return false;
         if (status != that.status) return false;
         if (quzcontent != null ? !quzcontent.equals(that.quzcontent) : that.quzcontent != null) return false;
         if (ancontent != null ? !ancontent.equals(that.ancontent) : that.ancontent != null) return false;
-        if (auserid != null ? !auserid.equals(that.auserid) : that.auserid != null) return false;
         if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
         if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
 
@@ -129,11 +124,10 @@ public class Projectquz {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + quserid;
-        result = 31 * result + projectid;
+        result = 31 * result + (quser != null ? quser.hashCode() : 0);
+        result = 31 * result + (project != null ? project.hashCode() : 0);
         result = 31 * result + (quzcontent != null ? quzcontent.hashCode() : 0);
         result = 31 * result + (ancontent != null ? ancontent.hashCode() : 0);
-        result = 31 * result + (auserid != null ? auserid.hashCode() : 0);
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);
         result = 31 * result + status;

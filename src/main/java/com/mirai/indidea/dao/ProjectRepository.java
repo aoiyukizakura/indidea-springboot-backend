@@ -4,6 +4,10 @@ import com.mirai.indidea.entity.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
     Project findProjectByCategoryAndId(Integer category, Integer id);
+    List<Project> findAll();
+    List<Project> findProjectByCategoryId(Integer id);
 }

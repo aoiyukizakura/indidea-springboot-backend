@@ -1,15 +1,20 @@
 package com.mirai.indidea.entity;
 
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "project", schema = "indidea", catalog = "")
 public class Project {
     private int id;
     private String title;
     private String subtitle;
-    private Integer category;
     private String address;
     private String pic;
     private String video;
@@ -17,14 +22,16 @@ public class Project {
     private Integer targetpoint;
     private Date targetdate;
     private Date perdate;
-    private int userid;
+    private User owner;
     private String publishlink;
     private String publishtitle;
     private Date createdat;
     private Date updatedat;
-    private Integer status;
+    private Integer status = 0;
+    private Category category;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -52,16 +59,6 @@ public class Project {
 
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
-    }
-
-    @Basic
-    @Column(name = "category", nullable = true)
-    public Integer getCategory() {
-        return category;
-    }
-
-    public void setCategory(Integer category) {
-        this.category = category;
     }
 
     @Basic
@@ -134,14 +131,13 @@ public class Project {
         this.perdate = perdate;
     }
 
-    @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
+    @ManyToOne
+    public User getOwner() {
+        return owner;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     @Basic
@@ -166,6 +162,7 @@ public class Project {
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -176,6 +173,7 @@ public class Project {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
@@ -185,13 +183,22 @@ public class Project {
     }
 
     @Basic
-    @Column(name = "status", nullable = true)
+    @Column(name = "status", nullable = false)
     public Integer getStatus() {
         return status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    @ManyToOne
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override
@@ -202,7 +209,7 @@ public class Project {
         Project that = (Project) o;
 
         if (id != that.id) return false;
-        if (userid != that.userid) return false;
+        if (owner != that.owner) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (subtitle != null ? !subtitle.equals(that.subtitle) : that.subtitle != null) return false;
         if (category != null ? !category.equals(that.category) : that.category != null) return false;
@@ -235,7 +242,7 @@ public class Project {
         result = 31 * result + (targetpoint != null ? targetpoint.hashCode() : 0);
         result = 31 * result + (targetdate != null ? targetdate.hashCode() : 0);
         result = 31 * result + (perdate != null ? perdate.hashCode() : 0);
-        result = 31 * result + userid;
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
         result = 31 * result + (publishlink != null ? publishlink.hashCode() : 0);
         result = 31 * result + (publishtitle != null ? publishtitle.hashCode() : 0);
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);

@@ -1,18 +1,24 @@
 package com.mirai.indidea.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "apply", schema = "indidea", catalog = "")
 public class Apply {
     private int id;
-    private int status;
+    private int status = 1;
     private Date createdat;
     private Date updatedat;
-    private int userid;
+    private User user;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -34,6 +40,7 @@ public class Apply {
 
     @Basic
     @Column(name = "createdat", nullable = true)
+    @CreatedDate
     public Date getCreatedat() {
         return createdat;
     }
@@ -44,6 +51,7 @@ public class Apply {
 
     @Basic
     @Column(name = "updatedat", nullable = true)
+    @LastModifiedDate
     public Date getUpdatedat() {
         return updatedat;
     }
@@ -52,14 +60,13 @@ public class Apply {
         this.updatedat = updatedat;
     }
 
-    @Basic
-    @Column(name = "userid", nullable = false)
-    public int getUserid() {
-        return userid;
+    @OneToOne
+    public User getUser() {
+        return user;
     }
 
-    public void setUserid(int userid) {
-        this.userid = userid;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -67,13 +74,13 @@ public class Apply {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Apply that = (Apply) o;
+        Apply apply = (Apply) o;
 
-        if (id != that.id) return false;
-        if (status != that.status) return false;
-        if (userid != that.userid) return false;
-        if (createdat != null ? !createdat.equals(that.createdat) : that.createdat != null) return false;
-        if (updatedat != null ? !updatedat.equals(that.updatedat) : that.updatedat != null) return false;
+        if (id != apply.id) return false;
+        if (status != apply.status) return false;
+        if (user != apply.user) return false;
+        if (createdat != null ? !createdat.equals(apply.createdat) : apply.createdat != null) return false;
+        if (updatedat != null ? !updatedat.equals(apply.updatedat) : apply.updatedat != null) return false;
 
         return true;
     }
@@ -84,7 +91,7 @@ public class Apply {
         result = 31 * result + status;
         result = 31 * result + (createdat != null ? createdat.hashCode() : 0);
         result = 31 * result + (updatedat != null ? updatedat.hashCode() : 0);
-        result = 31 * result + userid;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
     }
 }

@@ -26,6 +26,7 @@ public class User {
     private String avatar;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -46,7 +47,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "password", nullable = true, length = 50)
+    @Column(name = "password", nullable = false, length = 50)
     public String getPassword() {
         return password;
     }
