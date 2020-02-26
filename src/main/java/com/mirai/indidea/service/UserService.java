@@ -5,6 +5,7 @@ import com.mirai.indidea.dto.Userdto.UserRegisterDto;
 import com.mirai.indidea.dto.Userdto.UserUpdateDto;
 import com.mirai.indidea.entity.User;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 public interface UserService {
@@ -15,5 +16,6 @@ public interface UserService {
     boolean delete(int id);
     boolean update(@Valid UserUpdateDto userUpdateDto, int id);
     boolean changePassword(int id, String password);
+    boolean logout(HttpServletRequest request);
 }
 

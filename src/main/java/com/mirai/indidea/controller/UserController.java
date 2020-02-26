@@ -1,8 +1,5 @@
 package com.mirai.indidea.controller;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.mirai.indidea.annotation.UserLoginToken;
 import com.mirai.indidea.dto.Result.ResultDto;
 import com.mirai.indidea.dto.Userdto.LoginDto;
@@ -14,13 +11,13 @@ import com.mirai.indidea.utils.JwtUtils;
 import com.mirai.indidea.utils.ResultUtils;
 import com.mirai.indidea.utils.UploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Random;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -66,7 +63,10 @@ public class UserController {
         User u = userService.login(loginDto);
         if( u != null ){
             String token = JwtUtils.getToken(u);
-            return ResultUtils.Result(200,"登录成功", token);
+            Map<String, Object> map = new HashMap<>();
+            map.put("token", token);
+            map.put("userInfo", u);
+            return ResultUtils.Result(200,"登录成功", map);
         } else {
             return ResultUtils.Result(200,"登陆失败，请检查邮箱和密码是否正确", false);
         }
@@ -114,8 +114,8 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public boolean logout(HttpServletRequest request) {
-        return true;
+    public ResultDto<Object> logout(HttpServletRequest request) {
+        return ResultUtils.Result(200, "修改失败", userService.logout(request));
     }
 
     /**

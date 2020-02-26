@@ -1,7 +1,7 @@
 package com.mirai.indidea.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "project", schema = "indidea", catalog = "")

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 
@@ -89,6 +90,11 @@ public class UserServiceImpl implements UserService {
         if (userUpdateDto.getPassword() != null)
             u.setPassword(MD5Utils.crypt(userUpdateDto.getPassword()));
         userRepository.saveAndFlush(u);
+        return true;
+    }
+
+    @Override
+    public boolean logout(HttpServletRequest request) {
         return true;
     }
 
