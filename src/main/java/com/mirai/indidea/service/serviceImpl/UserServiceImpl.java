@@ -1,9 +1,11 @@
 package com.mirai.indidea.service.serviceImpl;
 
+import com.mirai.indidea.dao.ProjectRepository;
 import com.mirai.indidea.dao.UserRepository;
 import com.mirai.indidea.dto.Userdto.LoginDto;
 import com.mirai.indidea.dto.Userdto.UserRegisterDto;
 import com.mirai.indidea.dto.Userdto.UserUpdateDto;
+import com.mirai.indidea.entity.Project;
 import com.mirai.indidea.entity.User;
 import com.mirai.indidea.service.UserService;
 import com.mirai.indidea.utils.MD5Utils;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Service
@@ -23,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     /**
      * 查找用户详细信息
@@ -120,6 +126,11 @@ public class UserServiceImpl implements UserService {
         user.setStatus(0);
         userRepository.saveAndFlush(user);
         return true;
+    }
+
+    @Override
+    public List<Project> findMyProject(Integer id) {
+        return projectRepository.findProjectByOwnerId(id);
     }
 
 }

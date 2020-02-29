@@ -5,6 +5,7 @@ import com.mirai.indidea.dto.Result.ResultDto;
 import com.mirai.indidea.dto.Userdto.LoginDto;
 import com.mirai.indidea.dto.Userdto.UserRegisterDto;
 import com.mirai.indidea.dto.Userdto.UserUpdateDto;
+import com.mirai.indidea.entity.Project;
 import com.mirai.indidea.entity.User;
 import com.mirai.indidea.service.UserService;
 import com.mirai.indidea.utils.JwtUtils;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -116,6 +118,14 @@ public class UserController {
     @GetMapping("/logout")
     public ResultDto<Object> logout(HttpServletRequest request) {
         return ResultUtils.Result(200, "修改失败", userService.logout(request));
+    }
+
+    @UserLoginToken
+    @GetMapping("/getMyProjects")
+    public ResultDto<Object> getProject(HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        List<Project> projectList = userService.findMyProject(userId);
+        return ResultUtils.success(projectList);
     }
 
     /**

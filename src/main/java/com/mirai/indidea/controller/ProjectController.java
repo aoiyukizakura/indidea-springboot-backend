@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/project")
@@ -28,16 +29,26 @@ public class ProjectController {
 
     @GetMapping()
     public ResultDto<Object> findAll() {
-        return ResultUtils.Result(200,"success",projectService.findAll(2));
+        return ResultUtils.success(projectService.test());
     }
 
     @UserLoginToken
     @PostMapping()
-    public ResultDto<Object> create( @RequestParam("categoryId") int categoryId, HttpServletRequest request ) {
-        System.out.println(request);
+    public ResultDto<Object> create( @RequestBody UpdateProjectDto projectDto,
+                                     HttpServletRequest request ) {
         int userId = JwtUtils.getIdInRequest(request);
-        Project p = projectService.created(userId, categoryId);
+        Project p = projectService.create(userId, projectDto.getCategoryId());
         return ResultUtils.Result(200, "success", p);
     }
 
+    @UserLoginToken
+    @PostMapping("/update")
+    public ResultDto<Object> update(@Valid @RequestBody UpdateProjectDto updateProjectDto) {
+        return ResultUtils.success(updateProjectDto);
+    }
+
+    @GetMapping("/top9Project")
+    public ResultDto<Object> top9Project() {
+        return ResultUtils.success(projectService.top9Project());
+    }
 }

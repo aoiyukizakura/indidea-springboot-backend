@@ -10,4 +10,12 @@ public class ResultUtils {
         resultDto.setData(data);
         return resultDto;
     }
+
+    public static ResultDto<Object> success(Object data) {
+        return ResultUtils.Result(200,"success",data);
+    }
+
+    public static ResultDto<Object> fail() {
+        return ResultUtils.Result(-1, "fail", false);
+    }
 }
