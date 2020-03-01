@@ -23,8 +23,8 @@ public class ProjectController {
     ProjectService projectService;
 
     @GetMapping("/{id}")
-    public ResultDto<Object> findByUserId(@PathVariable int id) {
-        return ResultUtils.Result(200, "success", projectService.findByUserId(id));
+    public ResultDto<Object> findById(@PathVariable int id) {
+        return ResultUtils.Result(200, "success", projectService.findProject(id));
     }
 
     @GetMapping()
@@ -50,5 +50,15 @@ public class ProjectController {
     @GetMapping("/top9Project")
     public ResultDto<Object> top9Project() {
         return ResultUtils.success(projectService.top9Project());
+    }
+
+    @GetMapping("/featuredProject")
+    public ResultDto<Object> featured() {
+        return ResultUtils.success(projectService.FeaturedProject());
+    }
+
+    @GetMapping("/topHitProject")
+    public ResultDto<Object> topHit() {
+        return ResultUtils.success(projectService.topHitProject());
     }
 }

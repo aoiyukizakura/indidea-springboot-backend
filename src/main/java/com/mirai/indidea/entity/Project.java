@@ -20,6 +20,7 @@ public class Project {
     private String video;
     private String story;
     private Integer targetpoint;
+    private Integer getpoint = 0;
     private Date targetdate;
     private Date perdate;
     private User owner;
@@ -29,6 +30,7 @@ public class Project {
     private Date updatedat;
     private Integer status = 0;
     private Category category;
+    private Integer hittime = 0;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -109,6 +111,16 @@ public class Project {
 
     public void setTargetpoint(Integer targetpoint) {
         this.targetpoint = targetpoint;
+    }
+
+    @Basic
+    @Column(name = "getpoint", nullable = false)
+    public Integer getGetpoint() {
+        return getpoint;
+    }
+
+    public void setGetpoint(Integer getpoint) {
+        this.getpoint = getpoint;
     }
 
     @Basic
@@ -199,6 +211,16 @@ public class Project {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    @Basic
+    @Column(name = "hittime", nullable = true)
+    public Integer getHittime() {
+        return hittime;
+    }
+
+    public void setHittime(Integer hittime) {
+        this.hittime = hittime;
     }
 
     @Override

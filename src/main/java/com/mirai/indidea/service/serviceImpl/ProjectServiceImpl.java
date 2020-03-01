@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +32,11 @@ public class ProjectServiceImpl implements ProjectService {
     CategoryRepository categoryRepository;
 
     @Override
-    public Project findProject(Integer cid, Integer id) {
-        return projectRepository.findProjectByCategoryAndId(cid,id);
+    public Project findProject(Integer id) {
+        Project p = projectRepository.findProjectById(id);
+        p.setHittime(p.getHittime()+1);
+        projectRepository.saveAndFlush(p);
+        return p;
     }
 
     @Override
@@ -88,11 +92,21 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Project> top9Project() {
-        return projectRepository.findTop9ByStatusOrderByUpdatedatDesc(1);
+        return projectRepository.findTop9ByStatusAndTargetdateAfterOrderByUpdatedatDesc(1, new Date());
     }
 
     @Override
     public List<Map<String,Object>> test() {
         return projectRepository.test();
+    }
+
+    @Override
+    public Project FeaturedProject() {
+        return projectRepository.findProjectByStatus(5);
+    }
+
+    @Override
+    public List<Project> topHitProject() {
+        return projectRepository.findTop12ByStatusAndTargetdateAfterOrderByHittimeDesc(1,new Date());
     }
 }
