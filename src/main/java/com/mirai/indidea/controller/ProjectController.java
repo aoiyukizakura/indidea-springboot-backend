@@ -1,6 +1,7 @@
 package com.mirai.indidea.controller;
 
 import com.mirai.indidea.annotation.UserLoginToken;
+import com.mirai.indidea.dto.ProjectDto.QueryDto;
 import com.mirai.indidea.dto.ProjectDto.UpdateProjectDto;
 import com.mirai.indidea.dto.Result.ResultDto;
 import com.mirai.indidea.entity.Project;
@@ -36,8 +37,9 @@ public class ProjectController {
     @PostMapping()
     public ResultDto<Object> create( @RequestBody UpdateProjectDto projectDto,
                                      HttpServletRequest request ) {
+//        return ResultUtils.success(projectDto);
         int userId = JwtUtils.getIdInRequest(request);
-        Project p = projectService.create(userId, projectDto.getCategoryId());
+        Project p = projectService.create(userId, projectDto);
         return ResultUtils.Result(200, "success", p);
     }
 
@@ -60,5 +62,16 @@ public class ProjectController {
     @GetMapping("/topHitProject")
     public ResultDto<Object> topHit() {
         return ResultUtils.success(projectService.topHitProject());
+    }
+
+    @UserLoginToken
+    @GetMapping("/getProjectByFlagById")
+    public ResultDto<Object> getProjectByStatus(@Valid QueryDto query, HttpServletRequest request) {
+        System.out.println(query.getProjectId());
+        if(query.getFlag() == 0) {
+            return ResultUtils.success(projectService.getEditProject(query.getProjectId(), JwtUtils.getIdInRequest(request)));
+        } else {
+            return  ResultUtils.success(projectService.getProjectDetail(query.getProjectId()));
+        }
     }
 }

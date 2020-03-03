@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
-    Project findProjectByCategoryAndId(Integer category, Integer id);
     List<Project> findAll();
     List<Project> findProjectByCategoryId(Integer id);
     Project findProjectById(Integer id);
@@ -22,4 +21,6 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     List<Map<String,Object>> test();
 
     List<Project> findTop12ByStatusAndTargetdateAfterOrderByHittimeDesc(Integer status, Date date);
+    Project findProjectByIdAndStatusOrStatusOrStatus(int id, Integer status, Integer status2, Integer status3);
+    Project findProjectByIdAndStatusOrStatusOrStatusOrStatusAndOwnerId(int id, Integer status, Integer status2, Integer status3, Integer status4, int ownerId);
 }

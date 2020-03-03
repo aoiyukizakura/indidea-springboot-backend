@@ -23,7 +23,6 @@ public class UpdateProjectDto {
     private String publishtitle;
     private Integer categoryId;
 
-    @NotNull(message = "id can not null")
     public Integer getId() {
         return id;
     }

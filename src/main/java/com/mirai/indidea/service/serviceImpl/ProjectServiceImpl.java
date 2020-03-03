@@ -50,12 +50,13 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project create(Integer userId, Integer categoryId) {
+    public Project create(Integer userId, UpdateProjectDto projectDto) {
         User user = userRepository.findUserById(userId);
-        Category category = categoryRepository.findCategoryById(categoryId);
+        Category category = categoryRepository.findCategoryById(projectDto.getCategoryId());
         Project project = new Project();
         project.setOwner(user);
         project.setCategory(category);
+        project.setSubtitle(projectDto.getSubtitle());
         return projectRepository.saveAndFlush(project);
     }
 
@@ -108,5 +109,17 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> topHitProject() {
         return projectRepository.findTop12ByStatusAndTargetdateAfterOrderByHittimeDesc(1,new Date());
+    }
+
+    @Override
+    public Project getProjectDetail(int projectId) {
+        Project p = projectRepository.findProjectByIdAndStatusOrStatusOrStatus(projectId,1,5,6);
+        p.setHittime(p.getHittime() + 1);
+        return projectRepository.saveAndFlush(p);
+    }
+
+    @Override
+    public Project getEditProject(int projectId, int ownerId) {
+        return projectRepository.findProjectByIdAndStatusOrStatusOrStatusOrStatusAndOwnerId(projectId,0,2,3,7,ownerId);
     }
 }
