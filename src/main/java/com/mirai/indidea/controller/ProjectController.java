@@ -67,11 +67,33 @@ public class ProjectController {
     @UserLoginToken
     @GetMapping("/getProjectByFlagById")
     public ResultDto<Object> getProjectByStatus(@Valid QueryDto query, HttpServletRequest request) {
-        System.out.println(query.getProjectId());
+//        System.out.println(query.getProjectId());
         if(query.getFlag() == 0) {
             return ResultUtils.success(projectService.getEditProject(query.getProjectId(), JwtUtils.getIdInRequest(request)));
         } else {
             return  ResultUtils.success(projectService.getProjectDetail(query.getProjectId()));
         }
+    }
+
+    @UserLoginToken
+    @PutMapping("/waitCheckProject")
+    public ResultDto<Object> waitCheckProject(@Valid @RequestBody QueryDto query) {
+//        return ResultUtils.success(query);
+        Project p = projectService.waitCheckProject(query.getProjectId());
+        return ResultUtils.success(p);
+    }
+
+    @UserLoginToken
+    @PutMapping("/backToEdit")
+    public ResultDto<Object> backToEdit(@Valid @RequestBody QueryDto query) {
+        Project p = projectService.backToEdit(query.getProjectId());
+        return ResultUtils.success(p);
+    }
+
+    @UserLoginToken
+    @PutMapping("/sendProject")
+    public ResultDto<Object> sendProject(@Valid @RequestBody QueryDto query) {
+        Project p = projectService.sendProject(query.getProjectId());
+        return ResultUtils.success(p);
     }
 }

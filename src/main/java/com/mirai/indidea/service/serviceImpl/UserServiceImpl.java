@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Project> findMyProject(Integer id) {
-        return projectRepository.findProjectByOwnerId(id);
+        return projectRepository.findProjectByOwnerIdAndStatusNot(id,4);
     }
 
 }

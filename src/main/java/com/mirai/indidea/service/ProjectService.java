@@ -18,4 +18,9 @@ public interface ProjectService {
     List<Project> topHitProject();
     Project getProjectDetail(int projectId);
     Project getEditProject(int projectId, int ownerId);
+    Project waitCheckProject(int projectId);
+
+    Project backToEdit(Integer projectId);
+
+    Project sendProject(Integer projectId);
 }

@@ -13,7 +13,7 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     List<Project> findAll();
     List<Project> findProjectByCategoryId(Integer id);
     Project findProjectById(Integer id);
-    List<Project> findProjectByOwnerId(Integer id);
+    List<Project> findProjectByOwnerIdAndStatusNot(Integer id, Integer status);
     Project findProjectByStatus(Integer status);
     List<Project> findTop9ByStatusAndTargetdateAfterOrderByUpdatedatDesc(Integer status, Date targetdate);
 

@@ -122,4 +122,25 @@ public class ProjectServiceImpl implements ProjectService {
     public Project getEditProject(int projectId, int ownerId) {
         return projectRepository.findProjectByIdAndStatusOrStatusOrStatusOrStatusAndOwnerId(projectId,0,2,3,7,ownerId);
     }
+
+    @Override
+    public Project waitCheckProject(int projectId) {
+        Project p = projectRepository.findProjectById(projectId);
+        p.setStatus(7);
+        return projectRepository.saveAndFlush(p);
+    }
+
+    @Override
+    public Project backToEdit(Integer projectId) {
+        Project p = projectRepository.findProjectById(projectId);
+        p.setStatus(0);
+        return projectRepository.saveAndFlush(p);
+    }
+
+    @Override
+    public Project sendProject(Integer projectId) {
+        Project p = projectRepository.findProjectById(projectId);
+        p.setStatus(1);
+        return projectRepository.saveAndFlush(p);
+    }
 }
