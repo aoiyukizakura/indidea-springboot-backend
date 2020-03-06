@@ -54,6 +54,16 @@ public class UploadUtils {
         return filename;
     }
 
+    public static boolean Delete(String filename) {
+        File fileDir = getImgDirFile();
+        File file = new File(fileDir.getAbsolutePath() + File.separator + filename);
+        if(file.exists()) {
+            return file.delete();
+        } else {
+            return false;
+        }
+    }
+
 //    public static String Upload(MultipartFile file) {
 //        if (file.isEmpty())
 //            return null;
