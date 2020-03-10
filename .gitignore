@@ -2,6 +2,7 @@ HELP.md
 .gradle
 build/
 src/main/resources/static/uploads/
+src/main/resources/static/asserts/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/java/**
 !**/src/main/resources/**.yml

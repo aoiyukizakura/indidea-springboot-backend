@@ -17,6 +17,8 @@ public class Report {
     private Date createdat;
     private Date updatedat;
     private int status = 1;
+    private String editby;
+    private String content;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,6 +79,26 @@ public class Report {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @Basic
+    @Column(name = "editby", nullable = true)
+    public String getEditby() {
+        return editby;
+    }
+
+    public void setEditby(String editby) {
+        this.editby = editby;
+    }
+
+    @Basic
+    @Column(name = "content", nullable = true)
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Override

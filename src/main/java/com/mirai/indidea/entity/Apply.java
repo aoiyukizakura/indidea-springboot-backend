@@ -16,6 +16,7 @@ public class Apply {
     private Date createdat;
     private Date updatedat;
     private User user;
+    private String editby;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,6 +68,16 @@ public class Apply {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Basic
+    @Column(name = "editby", nullable = true)
+    public String getEditby() {
+        return editby;
+    }
+
+    public void setEditby(String editby) {
+        this.editby = editby;
     }
 
     @Override

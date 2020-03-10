@@ -11,16 +11,32 @@ import java.util.Map;
 
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
     List<Project> findAll();
+
+    List<Project> findProjectsByStatusNotAndTitleLike(Integer status, String title);
+    List<Project> findProjectsByStatusNotAndTitleLikeAndCategoryId(Integer status, String title, Integer category_id);
+
     List<Project> findProjectByCategoryId(Integer id);
+
     Project findProjectById(Integer id);
+
     List<Project> findProjectByOwnerIdAndStatusNot(Integer id, Integer status);
+
     Project findProjectByStatus(Integer status);
+
+    List<Project> findProjectsByStatus(Integer status);
+    List<Project> findProjectsByStatusAndCategoryId(Integer status, Integer category_id);
+
     List<Project> findTop9ByStatusAndTargetdateAfterOrderByUpdatedatDesc(Integer status, Date targetdate);
+
+    List<Project> findProjectsByStatusAndTitleLike(Integer status, String title);
+    List<Project> findProjectsByStatusAndTitleLikeAndCategoryId(Integer status, String title, Integer category_id);
 
     @Query(nativeQuery = true, value = "SELECT owner_id,sum(targetpoint) FROM indidea.project group by owner_id;")
     List<Map<String,Object>> test();
 
     List<Project> findTop12ByStatusAndTargetdateAfterOrderByHittimeDesc(Integer status, Date date);
+
     Project findProjectByIdAndStatusOrStatusOrStatus(int id, Integer status, Integer status2, Integer status3);
+
     Project findProjectByIdAndStatusOrStatusOrStatusOrStatusAndOwnerId(int id, Integer status, Integer status2, Integer status3, Integer status4, int ownerId);
 }

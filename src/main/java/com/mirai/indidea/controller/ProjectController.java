@@ -46,7 +46,7 @@ public class ProjectController {
     @UserLoginToken
     @PostMapping("/update")
     public ResultDto<Object> update(@Valid @RequestBody UpdateProjectDto updateProjectDto) {
-        return ResultUtils.success(updateProjectDto);
+        return ResultUtils.success(projectService.update(updateProjectDto));
     }
 
     @GetMapping("/top9Project")

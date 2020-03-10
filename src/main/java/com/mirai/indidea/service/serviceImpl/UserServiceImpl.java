@@ -47,12 +47,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User login(LoginDto logindto) {
-        System.out.println(logindto);
         return userRepository
-                .findUserByEmailAndPassword(
+                .findUserByEmailAndPasswordAndStatusNot(
                 logindto.getEmail(),
-                MD5Utils.crypt(logindto.getPassword())
-        );
+                MD5Utils.crypt(logindto.getPassword()), 0);
     }
 
     /**

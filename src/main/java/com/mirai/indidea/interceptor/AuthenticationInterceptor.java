@@ -5,9 +5,13 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
+import com.mirai.indidea.annotation.AdminToken;
 import com.mirai.indidea.annotation.PassToken;
 import com.mirai.indidea.annotation.UserLoginToken;
+import com.mirai.indidea.entity.Admin;
 import com.mirai.indidea.entity.User;
+import com.mirai.indidea.service.AdminService;
 import com.mirai.indidea.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
@@ -22,6 +26,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    AdminService adminService;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
@@ -69,6 +76,38 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 try {
                     jwtVerifier.verify(token);
                 } catch (JWTVerificationException e) {
+                    throw new RuntimeException("401 Unauthorized");
+                }
+                return true;
+            }
+        }
+        //检查是否需要管理员权限
+        if (method.isAnnotationPresent(AdminToken.class)) {
+            AdminToken adminToken = method.getAnnotation(AdminToken.class);
+            if(adminToken.required()) {
+                if (token == null) {
+                    throw new RuntimeException("无效token");
+                }
+                int adminId;
+                try {
+                    Claim claim = JWT.decode(token).getClaims().get("adminId");
+                    if (claim == null) {
+                        throw new RuntimeException("401 Unauthorized");
+                    } else {
+                        adminId = claim.asInt();
+                    }
+                } catch (JWTDecodeException e) {
+                    throw new RuntimeException("401 Unauthorized");
+                }
+                Admin admin = adminService.find(adminId);
+                if(admin == null) {
+                    throw new RuntimeException("找不到该管理员，请重新再试");
+                }
+                Algorithm algorithm = Algorithm.HMAC256("admin");
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                try {
+                    verifier.verify(token);
+                } catch (JWTDecodeException e) {
                     throw new RuntimeException("401 Unauthorized");
                 }
                 return true;
