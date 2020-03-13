@@ -30,6 +30,12 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     ReportRepository reportRepository;
 
+    @Autowired
+    PostRepository postRepository;
+
+    @Autowired
+    PostCommentRepository commentRepository;
+
     @Override
     public Admin login(String name, String pass) {
         return adminRepository.findAdminByAdminnameAndPassword(name, pass);
@@ -105,9 +111,50 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
+
+    @Override
+    public List<Post> allPost(int status) {
+        if (status == 4) {
+            List<Integer> list = Arrays.asList(2,3);
+            return postRepository.findPostsByStatusNotIn(list);
+        }
+        return postRepository.findPostsByStatus(status);
+    }
+
     @Override
     public boolean doPost(int postId, int flag) {
-        return false;
+        try {
+            Post post = postRepository.getOne(postId);
+            post.setStatus(flag);
+            postRepository.saveAndFlush(post);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean doPostComment(int commentId, int status) {
+        try {
+            Postcomment postcomment = commentRepository.getOne(commentId);
+            postcomment.setStatus(status);
+            commentRepository.saveAndFlush(postcomment);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public List<Postcomment> allCommentByPostId(int postId) {
+        return commentRepository.findPostcommentsByPostId(postId);
+    }
+
+    @Override
+    public int commentTotal(int postId) {
+        return commentRepository.countByPostId(postId);
     }
 
     @Override

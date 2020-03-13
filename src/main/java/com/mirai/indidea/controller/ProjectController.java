@@ -23,6 +23,7 @@ public class ProjectController {
     @Autowired
     ProjectService projectService;
 
+    //TODO 不能查询被禁用用户的项目
     @GetMapping("/{id}")
     public ResultDto<Object> findById(@PathVariable int id) {
         return ResultUtils.Result(200, "success", projectService.findProject(id));

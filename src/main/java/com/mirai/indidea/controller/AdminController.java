@@ -100,25 +100,12 @@ public class AdminController {
     }
 
     @AdminToken
-    @PutMapping("/doUserOrAuth")
-    public ResultDto<Object> doUser(@RequestParam("userId") int userId,
-                                    @RequestParam("status") int status) {
-        Integer[] integers = new Integer[]{0,1};
-        if (Arrays.asList(integers).contains(status)) {
-            return ResultUtils.success(adminService.doUser(userId, status));
-        }
-        else
-            return ResultUtils.fail();
-    }
-
-    @AdminToken
     @GetMapping("/reportList")
     public ResultDto<Object> reportList(@RequestParam("pageIndex") int pageNum, @RequestParam("pageSize") int pageSize,
                                         @RequestParam("status") Integer status) {
         List<Report> reports = adminService.allReport(status);
         return ResultUtils.pager(reports, pageNum, pageSize);
     }
-
     @AdminToken
     @PutMapping("/doReport")
     public ResultDto<Object> doReport(@RequestParam("reportId") int reportId,
@@ -126,32 +113,6 @@ public class AdminController {
                                       HttpServletRequest request) {
         int adminId = JwtUtils.getAdminIdInRequest(request);
         return ResultUtils.success(adminService.doReport(reportId, status, adminService.find(adminId).getAdminname()));
-    }
-
-    @AdminToken
-    @PutMapping("/doProject")
-    public ResultDto<Object> doProject(@RequestParam("projectId") int projectId,
-                                       @RequestParam("status") int status) {
-        return ResultUtils.success(adminService.doProject(projectId, status));
-    }
-
-    @AdminToken
-    @PutMapping("/doPost")
-    public ResultDto<Object> doPost(@RequestParam("postId") int postId,
-                                    @RequestParam("status") int status) {
-        return ResultUtils.success(adminService.doPost(postId, status));
-    }
-
-    @AdminToken
-    @GetMapping("/categoriesList")
-    public ResultDto<Object> categoriesList() {
-        return ResultUtils.success(adminService.allCategories());
-    }
-
-    @AdminToken
-    @PutMapping("/doCategories")
-    public ResultDto<Object> doCategories(@RequestParam("name") String name) {
-        return ResultUtils.success(adminService.doCategories(name));
     }
 
     @AdminToken
@@ -163,7 +124,54 @@ public class AdminController {
         List<Project> list = adminService.allProject(status, title, categoryId);
         return ResultUtils.pager(list, pageNum, pageSize);
     }
+    @AdminToken
+    @PutMapping("/doProject")
+    public ResultDto<Object> doProject(@RequestParam("projectId") int projectId,
+                                       @RequestParam("status") int status) {
+        return ResultUtils.success(adminService.doProject(projectId, status));
+    }
 
+    /** 帖子 **/
+    @AdminToken
+    @GetMapping("/postList")
+    public ResultDto<Object> postList(@RequestParam("status") int status,
+                                      @RequestParam("pageIndex") int pageNum,
+                                      @RequestParam("pageSize") int pageSize) {
+        List<Post> posts = adminService.allPost(status);
+        return ResultUtils.pager(posts, pageNum, pageSize);
+    }
+    @AdminToken
+    @PutMapping("/doPost")
+    public ResultDto<Object> doPost(@RequestParam("postId") int postId,
+                                    @RequestParam("status") int status) {
+        return ResultUtils.success(adminService.doPost(postId, status));
+    }
+    @AdminToken
+    @GetMapping("/postComment")
+    public ResultDto<Object> postComment(@RequestParam("postId") int postId) {
+        return ResultUtils.success(adminService.allCommentByPostId(postId));
+    }
+    @AdminToken
+    @PutMapping("/doComment")
+    public ResultDto<Object> doComment(@RequestParam("commentId") int commentId,
+                                      @RequestParam("status") int status) {
+        return ResultUtils.success(adminService.doPostComment(commentId, status));
+    }
+
+    /** 分类 **/
+    @AdminToken
+    @GetMapping("/categoriesList")
+    public ResultDto<Object> categoriesList() {
+        return ResultUtils.success(adminService.allCategories());
+    }
+    @AdminToken
+    @PutMapping("/doCategories")
+    public ResultDto<Object> doCategories(@RequestParam("name") String name) {
+        return ResultUtils.success(adminService.doCategories(name));
+    }
+
+
+    /** 用户 **/
     @AdminToken
     @GetMapping("/userList")
     public ResultDto<Object> userList(@RequestParam("status") int status,
@@ -176,6 +184,17 @@ public class AdminController {
         else
             userList = adminService.allUser(username);
         return ResultUtils.pager(userList, pageNum, pageSize);
+    }
+    @AdminToken
+    @PutMapping("/doUserOrAuth")
+    public ResultDto<Object> doUser(@RequestParam("userId") int userId,
+                                    @RequestParam("status") int status) {
+        Integer[] integers = new Integer[]{0,1};
+        if (Arrays.asList(integers).contains(status)) {
+            return ResultUtils.success(adminService.doUser(userId, status));
+        }
+        else
+            return ResultUtils.fail();
     }
 
     @AdminToken
@@ -204,5 +223,4 @@ public class AdminController {
         } else return ResultUtils.fail();
 
     }
-
 }

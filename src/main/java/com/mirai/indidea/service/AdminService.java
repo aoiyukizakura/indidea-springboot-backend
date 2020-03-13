@@ -18,6 +18,10 @@ public interface AdminService {
     List<Project> allProject(int status, String title, Integer categoryId);
 
     boolean doPost(int postId, int flag);
+    List<Post> allPost(int status);
+    boolean doPostComment(int commentId, int status);
+    List<Postcomment> allCommentByPostId(int postId);
+    int commentTotal(int postId);
 
     boolean doCategories(String name);
     List<Category> allCategories();

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.xml.crypto.Data;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -39,4 +40,8 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     Project findProjectByIdAndStatusOrStatusOrStatus(int id, Integer status, Integer status2, Integer status3);
 
     Project findProjectByIdAndStatusOrStatusOrStatusOrStatusAndOwnerId(int id, Integer status, Integer status2, Integer status3, Integer status4, int ownerId);
+
+    Project findProjectByIdAndStatusNotInAndOwnerId(int id, Collection<Integer> status, int owner_id);
+
+    Integer countProjectsByCategoryId(int category_id);
 }
