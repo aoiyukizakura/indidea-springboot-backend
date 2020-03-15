@@ -97,4 +97,16 @@ public class ProjectController {
         Project p = projectService.sendProject(query.getProjectId());
         return ResultUtils.success(p);
     }
+
+//    @UserLoginToken
+//    @PutMapping("/saveBasic")
+//    public ResultDto<Object> saveBasic(@RequestBody Project project) {
+//        try {
+//            projectService.update(project);
+//            return ResultUtils.success(true);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResultUtils.fail();
+//        }
+//    }
 }

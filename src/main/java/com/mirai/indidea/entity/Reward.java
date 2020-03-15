@@ -11,7 +11,7 @@ import java.util.Date;
 public class Reward {
     private int id;
     private String name;
-    private int status = 0;
+    private int status = 1;
     private Integer point;
     private String des;
     private Date expected;
