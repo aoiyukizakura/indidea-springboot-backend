@@ -1,6 +1,7 @@
 package com.mirai.indidea.dao;
 
 import com.mirai.indidea.entity.Project;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -44,4 +45,13 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     Project findProjectByIdAndStatusNotInAndOwnerId(int id, Collection<Integer> status, int owner_id);
 
     Integer countProjectsByCategoryId(int category_id);
+
+    /** 搜索
+     * 搜索
+     */
+    List<Project> findByTitleContainsAndCategoryIdAndStatusIn(String title, Integer category_id, Collection<Integer> status, Pageable pageable);
+    List<Project> findByTitleContainsAndStatusIn(String title, Collection<Integer> status, Pageable pageable);
+
+    Integer countByTitleContainsAndCategoryIdAndStatusIn(String title, Integer category_id, Collection<Integer> status);
+    Integer countByTitleContainsAndStatusIn(String title, Collection<Integer> status);
 }

@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/uploadFile")
 public class FileController {
+
     @PostMapping()
     public ResultDto<Object> upload(@RequestParam("file") MultipartFile file) {
         if(file != null) {
@@ -27,4 +28,5 @@ public class FileController {
             return ResultUtils.fail();
         }
     }
+
 }

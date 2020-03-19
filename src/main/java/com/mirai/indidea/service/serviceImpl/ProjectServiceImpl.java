@@ -10,12 +10,12 @@ import com.mirai.indidea.entity.User;
 import com.mirai.indidea.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -34,7 +34,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project findProject(Integer id) {
         Project p = projectRepository.findProjectById(id);
-        p.setHittime(p.getHittime()+1);
+        p.setHittime(p.getHittime() + 1);
         projectRepository.saveAndFlush(p);
         return p;
     }
@@ -97,7 +97,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Map<String,Object>> test() {
+    public List<Map<String, Object>> test() {
         return projectRepository.test();
     }
 
@@ -108,19 +108,19 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Project> topHitProject() {
-        return projectRepository.findTop12ByStatusAndTargetdateAfterOrderByHittimeDesc(1,new Date());
+        return projectRepository.findTop12ByStatusAndTargetdateAfterOrderByHittimeDesc(1, new Date());
     }
 
     @Override
     public Project getProjectDetail(int projectId) {
-        Project p = projectRepository.findProjectByIdAndStatusOrStatusOrStatus(projectId,1,5,6);
+        Project p = projectRepository.findProjectByIdAndStatusOrStatusOrStatus(projectId, 1, 5, 6);
         p.setHittime(p.getHittime() + 1);
         return projectRepository.saveAndFlush(p);
     }
 
     @Override
     public Project getEditProject(int projectId, int ownerId) {
-        return projectRepository.findProjectByIdAndStatusOrStatusOrStatusOrStatusAndOwnerId(projectId,0,2,3,7,ownerId);
+        return projectRepository.findProjectByIdAndStatusOrStatusOrStatusOrStatusAndOwnerId(projectId, 0, 2, 3, 7, ownerId);
     }
 
     @Override
@@ -142,5 +142,55 @@ public class ProjectServiceImpl implements ProjectService {
         Project p = projectRepository.findProjectById(projectId);
         p.setStatus(1);
         return projectRepository.saveAndFlush(p);
+
+
+    }
+
+    /**
+     * chaxun
+     */
+    @Override
+    public List<Project> search(String title, Integer category_id, Pageable pageable, Integer status) {
+        Integer[] inner_status;
+
+        if (status == 1) {
+            inner_status = new Integer[]{1, 5};
+        } else if (status == 0){
+            inner_status = new Integer[]{6};
+        } else {
+            return null;
+        }
+        try {
+            if (category_id != null) {
+                return projectRepository.findByTitleContainsAndCategoryIdAndStatusIn(title, category_id, Arrays.asList(inner_status), pageable);
+            } else {
+                return projectRepository.findByTitleContainsAndStatusIn(title, Arrays.asList(inner_status), pageable);
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Integer count(String title, Integer category_id, Integer status) {
+        Integer[] out_status;
+        if (status == 1) {
+            out_status = new Integer[]{1, 5};
+        } else if (status == 0){
+            out_status = new Integer[]{6};
+        } else {
+            return null;
+        }
+        try {
+            if (category_id != null) {
+                return projectRepository.countByTitleContainsAndCategoryIdAndStatusIn(title, category_id, Arrays.asList(out_status));
+            } else {
+                return projectRepository.countByTitleContainsAndStatusIn(title, Arrays.asList(out_status));
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

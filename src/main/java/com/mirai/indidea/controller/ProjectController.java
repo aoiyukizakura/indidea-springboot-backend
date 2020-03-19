@@ -11,10 +11,16 @@ import com.mirai.indidea.service.UserService;
 import com.mirai.indidea.utils.JwtUtils;
 import com.mirai.indidea.utils.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/project")
@@ -65,6 +71,11 @@ public class ProjectController {
         return ResultUtils.success(projectService.topHitProject());
     }
 
+    /**
+     * @param query id 项目id flag 0编辑状态 1正常状态
+     * @param request re
+     * @return ResultDto
+     */
     @UserLoginToken
     @GetMapping("/getProjectByFlagById")
     public ResultDto<Object> getProjectByStatus(@Valid QueryDto query, HttpServletRequest request) {
@@ -98,6 +109,52 @@ public class ProjectController {
         return ResultUtils.success(p);
     }
 
+    /**
+     * search Project
+     * @param categoryId 分类
+     * @param sort 根据什么排序 1根据最先发布 2根据点击量 3结束日期 4最多筹款
+     * @param keyword 关键字
+     * @param status  1进行中 2已结束
+     * @return ResultDto
+     */
+    @GetMapping("/searchProject")
+    public ResultDto<Object> searchProject(@RequestParam(required = false, value = "categoryId") Integer categoryId,
+                                           @RequestParam(required = false, value = "sort", defaultValue = "0") Integer sort,
+                                           @RequestParam(required = false, value = "keyword", defaultValue = "") String keyword,
+                                           @RequestParam(required = false, value = "status", defaultValue = "1") Integer status,
+                                           @RequestParam(required = false, value = "page", defaultValue = "0") int page) {
+        int pageSize = 9;
+        Pageable the9Element;
+        String sortBy;
+        switch (sort) {
+            case 1:
+                sortBy = "createdat";
+                break;
+            case 2:
+                sortBy = "hittime";
+                break;
+            case 3:
+                sortBy = "targetdate";
+                break;
+            case 4:
+                sortBy = "getpoint";
+                break;
+            default:
+                sortBy = "id";
+                break;
+        }
+        the9Element = PageRequest.of(page, pageSize, Sort.by(sortBy).descending());
+        if (categoryId == 0) {
+            categoryId = null;
+        }
+        List<Project> lists = projectService.search(keyword, categoryId, the9Element, status);
+        Integer total = projectService.count(keyword, categoryId, status);
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", lists);
+        map.put("total", total);
+        return ResultUtils.success(map);
+    }
+
 //    @UserLoginToken
 //    @PutMapping("/saveBasic")
 //    public ResultDto<Object> saveBasic(@RequestBody Project project) {
@@ -109,4 +166,5 @@ public class ProjectController {
 //            return ResultUtils.fail();
 //        }
 //    }
+
 }
