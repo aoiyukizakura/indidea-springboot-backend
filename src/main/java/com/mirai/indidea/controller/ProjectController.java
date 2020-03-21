@@ -1,5 +1,6 @@
 package com.mirai.indidea.controller;
 
+import com.auth0.jwt.JWT;
 import com.mirai.indidea.annotation.UserLoginToken;
 import com.mirai.indidea.dto.ProjectDto.QueryDto;
 import com.mirai.indidea.dto.ProjectDto.UpdateProjectDto;
@@ -36,8 +37,8 @@ public class ProjectController {
     }
 
     @GetMapping()
-    public ResultDto<Object> findAll() {
-        return ResultUtils.success(projectService.test());
+    public ResultDto<Object> findAll(@RequestParam("id") Integer id) {
+        return ResultUtils.success(projectService.findById(id));
     }
 
     @UserLoginToken
@@ -154,6 +155,45 @@ public class ProjectController {
         map.put("total", total);
         return ResultUtils.success(map);
     }
+
+    /**
+     * project Detail
+     */
+    @GetMapping("/countSponsorByProjectId/{id}")
+    public ResultDto<Object> countSponsorByProjectId(@PathVariable int id) {
+        return  ResultUtils.success(projectService.countSponsor(id));
+    }
+
+    @UserLoginToken
+    @PutMapping("/saveProject")
+    public ResultDto<Object> saveProject(@RequestParam("projectId") int projectId,
+                                         @RequestParam("flag") int flag,
+                                         HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        if (flag == 1)
+            return ResultUtils.success(projectService.saveProject(projectId, userId));
+        else
+            return ResultUtils.success(projectService.deleteSave(projectId,userId));
+    }
+
+    @UserLoginToken
+    @GetMapping("/saveStatus")
+    public ResultDto<Object> saveStatus(@RequestParam("projectId") Integer projectId, HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(projectService.saveStatus(projectId, userId));
+    }
+
+    @UserLoginToken
+    @PostMapping("/supportProject")
+    public ResultDto<Object> supportProject(@RequestParam("projectId") int projectId,
+                                            @RequestParam("point") int point,
+                                            @RequestParam( required = false, value = "rewardId", defaultValue = "0") Integer rewardId,
+                                            HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(projectService.supportProject(projectId, userId, point, rewardId));
+
+    }
+
 
 //    @UserLoginToken
 //    @PutMapping("/saveBasic")

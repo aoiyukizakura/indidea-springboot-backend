@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "apply", schema = "indidea", catalog = "")
+@Table(name = "sponsor", schema = "indidea", catalog = "")
 public class Sponsor {
     private int id;
     private User sponsor;

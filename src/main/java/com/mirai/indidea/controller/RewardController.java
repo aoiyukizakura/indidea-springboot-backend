@@ -15,7 +15,6 @@ public class RewardController {
     @Autowired
     RewardService rewardService;
 
-    @UserLoginToken
     @GetMapping("/rewardListByProjectId")
     public ResultDto<Object> rewardList(@RequestParam("projectId") int projectId) {
         try {

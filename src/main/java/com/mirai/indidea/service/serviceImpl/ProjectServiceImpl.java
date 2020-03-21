@@ -1,12 +1,8 @@
 package com.mirai.indidea.service.serviceImpl;
 
-import com.mirai.indidea.dao.CategoryRepository;
-import com.mirai.indidea.dao.ProjectRepository;
-import com.mirai.indidea.dao.UserRepository;
+import com.mirai.indidea.dao.*;
 import com.mirai.indidea.dto.ProjectDto.UpdateProjectDto;
-import com.mirai.indidea.entity.Category;
-import com.mirai.indidea.entity.Project;
-import com.mirai.indidea.entity.User;
+import com.mirai.indidea.entity.*;
 import com.mirai.indidea.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -31,12 +28,29 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    SponsorRepository sponsorRepository;
+
+    @Autowired
+    FavoriteRepository favoriteRepository;
+
+    @Autowired
+    PointRepository pointRepository;
+
+    @Autowired
+    RewardRepository rewardRepository;
+
     @Override
     public Project findProject(Integer id) {
         Project p = projectRepository.findProjectById(id);
         p.setHittime(p.getHittime() + 1);
         projectRepository.saveAndFlush(p);
         return p;
+    }
+
+    @Override
+    public Project findById(Integer id) {
+        return projectRepository.findProjectById(id);
     }
 
     @Override
@@ -191,6 +205,102 @@ public class ProjectServiceImpl implements ProjectService {
         } catch (NullPointerException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    /**
+     * 详情
+     */
+    @Override
+    public long countSponsor(Integer projectId) {
+        return sponsorRepository.countByProjectId(projectId);
+    }
+    @Override
+    public List<Sponsor> sponsor(int projectId) {
+        return sponsorRepository.findByProjectId(projectId);
+    }
+
+    @Override
+    public boolean saveProject(int projectId, int userId) {
+        try {
+            Project project = projectRepository.findProjectById(projectId);
+            User user = userRepository.findUserById(userId);
+            if (project != null && user != null) {
+                Favorite favorite = new Favorite();
+                favorite.setProject(project);
+                favorite.setUser(user);
+                favoriteRepository.saveAndFlush(favorite);
+                return true;
+            } else return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteSave(int projectId, int userId) {
+        try {
+            favoriteRepository.deleteByProjectIdAndUserId(projectId, userId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean saveStatus(int projectId, int userId) {
+        return favoriteRepository.findByProjectIdAndUserId(projectId, userId) != null;
+    }
+
+    /**
+     *
+     * @param projectId 项目id
+     * @param userId 用户id
+     * @param point 实际捐献
+     * @param rewardId 用的哪个奖励阶梯 0则没有选择奖励阶梯(白给
+     * @return boolean
+     */
+    @Override
+    public boolean supportProject(int projectId, int userId, int point, int rewardId) {
+        Date dNow = new Date( );
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+        User user = userRepository.findUserById(userId);
+        Project project = projectRepository.findProjectById(projectId);
+        Reward reward = null;
+        Point p = new Point();
+        if (rewardId > 0) {
+            reward = rewardRepository.findById(rewardId);
+            if (reward.getPoint() > point) return false;
+        }
+        Integer balance = user.getBalance();
+        Integer projectPoint = project.getGetpoint();
+        String order = "support-project-" + project.getId() + "-user-" + user.getId() + "-" + ft.format(dNow);
+        if (balance >= point) {
+            try {
+                balance -= point;
+                projectPoint += point;
+                user.setBalance(balance);
+                project.setGetpoint(projectPoint);
+                Sponsor sponsor = new Sponsor();
+                sponsor.setSponsor(user);
+                sponsor.setProject(project);
+                sponsor.setPoint(point);
+                sponsor.setReward(reward);
+                p.setPoint(-point);
+                p.setUser(user);
+                p.setOrdernumber(order);
+                userRepository.saveAndFlush(user);
+                projectRepository.saveAndFlush(project);
+                pointRepository.saveAndFlush(p);
+                sponsorRepository.saveAndFlush(sponsor);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 }
