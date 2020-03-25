@@ -194,6 +194,11 @@ public class ProjectController {
 
     }
 
+    @GetMapping("/quzList")
+    public ResultDto<Object> quzList(@RequestParam("projectId") int projectId) {
+        return ResultUtils.success(projectService.quzList(projectId));
+    }
+
 
 //    @UserLoginToken
 //    @PutMapping("/saveBasic")

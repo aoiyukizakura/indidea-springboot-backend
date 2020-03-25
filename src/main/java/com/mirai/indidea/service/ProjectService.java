@@ -2,6 +2,7 @@ package com.mirai.indidea.service;
 
 import com.mirai.indidea.dto.ProjectDto.UpdateProjectDto;
 import com.mirai.indidea.entity.Project;
+import com.mirai.indidea.entity.Projectquz;
 import com.mirai.indidea.entity.Sponsor;
 import org.springframework.data.domain.Pageable;
 
@@ -46,5 +47,10 @@ public interface ProjectService {
     boolean saveStatus(int projectId, int userId);
 
     boolean supportProject(int projectId, int userId, int point, int rewardId);
+
+    /**
+     * quz
+     */
+    List<Projectquz> quzList(int projectId);
 
 }

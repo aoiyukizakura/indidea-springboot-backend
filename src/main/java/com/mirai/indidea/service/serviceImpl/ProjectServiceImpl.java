@@ -40,6 +40,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     RewardRepository rewardRepository;
 
+    @Autowired
+    ProjectquzRepository projectquzRepository;
+
     @Override
     public Project findProject(Integer id) {
         Project p = projectRepository.findProjectById(id);
@@ -302,5 +305,10 @@ public class ProjectServiceImpl implements ProjectService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public List<Projectquz> quzList(int projectId) {
+        return projectquzRepository.findByStatusAndProjectId(1, projectId);
     }
 }
