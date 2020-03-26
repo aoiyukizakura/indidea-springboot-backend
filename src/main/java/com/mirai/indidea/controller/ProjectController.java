@@ -187,7 +187,7 @@ public class ProjectController {
     @PostMapping("/supportProject")
     public ResultDto<Object> supportProject(@RequestParam("projectId") int projectId,
                                             @RequestParam("point") int point,
-                                            @RequestParam( required = false, value = "rewardId", defaultValue = "0") Integer rewardId,
+                                            @RequestParam(required = false, value = "rewardId", defaultValue = "0") Integer rewardId,
                                             HttpServletRequest request) {
         int userId = JwtUtils.getIdInRequest(request);
         return ResultUtils.success(projectService.supportProject(projectId, userId, point, rewardId));
@@ -197,6 +197,19 @@ public class ProjectController {
     @GetMapping("/quzList")
     public ResultDto<Object> quzList(@RequestParam("projectId") int projectId) {
         return ResultUtils.success(projectService.quzList(projectId));
+    }
+
+    @PostMapping("/addQuz")
+    public ResultDto<Object> addQuz(@RequestParam("quz") String quz,
+                                    @RequestParam("projectId") int projectId,
+                                    HttpServletRequest request) {
+        int user_id = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(projectService.addQuz(user_id, quz, projectId));
+    }
+
+    @GetMapping("/logList")
+    public ResultDto<Object> logList(@RequestParam("projectId") int projectId) {
+        return ResultUtils.success(projectService.logList(projectId));
     }
 
 

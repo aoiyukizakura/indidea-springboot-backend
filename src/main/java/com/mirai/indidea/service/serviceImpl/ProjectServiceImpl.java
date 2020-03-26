@@ -18,31 +18,24 @@ import java.util.*;
 @Transactional
 @Slf4j
 public class ProjectServiceImpl implements ProjectService {
-
     @Autowired
     ProjectRepository projectRepository;
-
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     CategoryRepository categoryRepository;
-
     @Autowired
     SponsorRepository sponsorRepository;
-
     @Autowired
     FavoriteRepository favoriteRepository;
-
     @Autowired
     PointRepository pointRepository;
-
     @Autowired
     RewardRepository rewardRepository;
-
     @Autowired
     ProjectquzRepository projectquzRepository;
-
+    @Autowired
+    LogRepository logRepository;
     @Override
     public Project findProject(Integer id) {
         Project p = projectRepository.findProjectById(id);
@@ -310,5 +303,28 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Projectquz> quzList(int projectId) {
         return projectquzRepository.findByStatusAndProjectId(1, projectId);
+    }
+
+    @Override
+    public boolean addQuz(int user_id, String quzcontent, int project_id) {
+        try {
+            User user = new User();
+            user.setId(user_id);
+            Project project = new Project();
+            project.setId(project_id);
+            Projectquz projectquz = new Projectquz();
+            projectquz.setProject(project);
+            projectquz.setQuser(user);
+            projectquz.setQuzcontent(quzcontent);
+            projectquzRepository.saveAndFlush(projectquz);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public List<Log> logList(int projectId) {
+        return logRepository.findByProjectIdAndStatus(projectId, 1);
     }
 }

@@ -1,6 +1,7 @@
 package com.mirai.indidea.service;
 
 import com.mirai.indidea.dto.ProjectDto.UpdateProjectDto;
+import com.mirai.indidea.entity.Log;
 import com.mirai.indidea.entity.Project;
 import com.mirai.indidea.entity.Projectquz;
 import com.mirai.indidea.entity.Sponsor;
@@ -52,5 +53,8 @@ public interface ProjectService {
      * quz
      */
     List<Projectquz> quzList(int projectId);
+    boolean addQuz(int user_id, String quzcontent, int project_id);
+
+    List<Log> logList(int projectId);
 
 }
