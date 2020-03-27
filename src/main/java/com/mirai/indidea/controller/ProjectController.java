@@ -212,6 +212,21 @@ public class ProjectController {
         return ResultUtils.success(projectService.logList(projectId));
     }
 
+    @GetMapping("/msgList")
+    public ResultDto<Object> msgList(@RequestParam("projectId") int projectId,
+                                     HttpServletRequest request) {
+        int user_id = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(projectService.msgList(projectId, user_id));
+    }
+
+    @PostMapping("/addMsg")
+    public ResultDto<Object> addMsg(@RequestParam("projectId") int projectId,
+                                    @RequestParam("content") String content,
+                                    HttpServletRequest request) {
+        int user_id = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(projectService.addMsg(projectId, user_id, content));
+    }
+
 
 //    @UserLoginToken
 //    @PutMapping("/saveBasic")

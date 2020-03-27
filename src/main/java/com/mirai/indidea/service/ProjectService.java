@@ -1,10 +1,7 @@
 package com.mirai.indidea.service;
 
 import com.mirai.indidea.dto.ProjectDto.UpdateProjectDto;
-import com.mirai.indidea.entity.Log;
-import com.mirai.indidea.entity.Project;
-import com.mirai.indidea.entity.Projectquz;
-import com.mirai.indidea.entity.Sponsor;
+import com.mirai.indidea.entity.*;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
@@ -57,4 +54,7 @@ public interface ProjectService {
 
     List<Log> logList(int projectId);
 
+    List<Msgboard> msgList(int projectId, int user_id);
+
+    boolean addMsg(int projectId, int user_id, String content);
 }

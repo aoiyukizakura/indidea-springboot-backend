@@ -36,6 +36,8 @@ public class ProjectServiceImpl implements ProjectService {
     ProjectquzRepository projectquzRepository;
     @Autowired
     LogRepository logRepository;
+    @Autowired
+    MsgboardRepository msgboardRepository;
     @Override
     public Project findProject(Integer id) {
         Project p = projectRepository.findProjectById(id);
@@ -325,6 +327,33 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Log> logList(int projectId) {
-        return logRepository.findByProjectIdAndStatus(projectId, 1);
+        return logRepository.findByProjectIdAndStatusOrderByNumberDesc(projectId, 1);
+    }
+    @Override
+    public List<Msgboard> msgList(int projectId, int user_id) {
+        return msgboardRepository.findByProjectIdAndStatusOrderByCreatedatDesc(projectId, 1);
+    }
+
+    @Override
+    public boolean addMsg(int projectId, int user_id, String content) {
+        try {
+            long sponsor = sponsorRepository.countByProjectIdAndSponsorId(projectId, user_id);
+            if (sponsor > 0) {
+                Msgboard msgboard = new Msgboard();
+                Project project = new Project();
+                project.setId(projectId);
+                User user = new User();
+                user.setId(user_id);
+                msgboard.setContent(content);
+                msgboard.setProject(project);
+                msgboard.setUser(user);
+                msgboardRepository.saveAndFlush(msgboard);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
