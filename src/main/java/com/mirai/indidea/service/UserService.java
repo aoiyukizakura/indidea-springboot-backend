@@ -3,8 +3,7 @@ package com.mirai.indidea.service;
 import com.mirai.indidea.dto.Userdto.LoginDto;
 import com.mirai.indidea.dto.Userdto.UserRegisterDto;
 import com.mirai.indidea.dto.Userdto.UserUpdateDto;
-import com.mirai.indidea.entity.Project;
-import com.mirai.indidea.entity.User;
+import com.mirai.indidea.entity.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -20,5 +19,14 @@ public interface UserService {
     boolean changePassword(int id, String password);
     boolean logout(HttpServletRequest request);
     List<Project> findMyProject(Integer id);
+
+    List<Point> pointList(int userId);
+    boolean addPoint(int userId, int point);
+
+    long supportNum(int userId);
+
+    List<Favorite> myFavProject(int userId);
+
+    List<Sponsor> muSupport(int userId);
 }
 

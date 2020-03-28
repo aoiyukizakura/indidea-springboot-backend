@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -112,11 +113,9 @@ public class Sponsor {
         if (project != sponsor.project) return false;
         if (point != sponsor.point) return false;
         if (status != sponsor.status) return false;
-        if (createdat != null ? !createdat.equals(sponsor.createdat) : sponsor.createdat != null) return false;
-        if (updatedat != null ? !updatedat.equals(sponsor.updatedat) : sponsor.updatedat != null) return false;
-        if (reward != null ? !reward.equals(sponsor.reward) : sponsor.reward != null) return false;
-
-        return true;
+        if (!Objects.equals(createdat, sponsor.createdat)) return false;
+        if (!Objects.equals(updatedat, sponsor.updatedat)) return false;
+        return Objects.equals(reward, sponsor.reward);
     }
 
     @Override

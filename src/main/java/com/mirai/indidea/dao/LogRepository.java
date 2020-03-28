@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface LogRepository extends JpaRepository<Log, Integer> {
     List<Log> findByProjectIdAndStatusOrderByNumberDesc(int project_id, int status);
+
+    int countByProjectId(int project_id);
 }

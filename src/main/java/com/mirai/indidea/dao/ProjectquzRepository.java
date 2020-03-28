@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ProjectquzRepository extends JpaRepository<Projectquz, Integer> {
     List<Projectquz> findByStatusAndProjectId(int status, int project_id);
-
+    Projectquz findById(int id);
 }

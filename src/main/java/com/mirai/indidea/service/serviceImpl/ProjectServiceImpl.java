@@ -19,25 +19,27 @@ import java.util.*;
 @Slf4j
 public class ProjectServiceImpl implements ProjectService {
     @Autowired
-    ProjectRepository projectRepository;
+    private ProjectRepository projectRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
     @Autowired
-    SponsorRepository sponsorRepository;
+    private SponsorRepository sponsorRepository;
     @Autowired
-    FavoriteRepository favoriteRepository;
+    private FavoriteRepository favoriteRepository;
     @Autowired
-    PointRepository pointRepository;
+    private PointRepository pointRepository;
     @Autowired
-    RewardRepository rewardRepository;
+    private RewardRepository rewardRepository;
     @Autowired
-    ProjectquzRepository projectquzRepository;
+    private ProjectquzRepository projectquzRepository;
     @Autowired
-    LogRepository logRepository;
+    private LogRepository logRepository;
     @Autowired
-    MsgboardRepository msgboardRepository;
+    private MsgboardRepository msgboardRepository;
+    @Autowired
+    private ReportRepository reportRepository;
     @Override
     public Project findProject(Integer id) {
         Project p = projectRepository.findProjectById(id);
@@ -326,11 +328,45 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public boolean replyQuz(int userId, String reply, int quzId) {
+        try {
+            Projectquz projectquz = projectquzRepository.findById(quzId);
+            if (projectquz.getProject().getId() != userId) {
+                return false;
+            }
+            projectquz.setAncontent(reply);
+            projectquzRepository.saveAndFlush(projectquz);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
     public List<Log> logList(int projectId) {
         return logRepository.findByProjectIdAndStatusOrderByNumberDesc(projectId, 1);
     }
+
     @Override
-    public List<Msgboard> msgList(int projectId, int user_id) {
+    public boolean updateLog(int projectId, String title, String content, int userId) {
+        try {
+            int number = logRepository.countByProjectId(projectId) + 1;
+            Log log = new Log();
+            log.setContent(content);
+            log.setTitle(title);
+            log.setNumber(number);
+            Project project = new Project();
+            project.setId(projectId);
+            log.setProject(project);
+            logRepository.saveAndFlush(log);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public List<Msgboard> msgList(int projectId) {
         return msgboardRepository.findByProjectIdAndStatusOrderByCreatedatDesc(projectId, 1);
     }
 
@@ -352,6 +388,27 @@ public class ProjectServiceImpl implements ProjectService {
             } else {
                 return false;
             }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean report(int userId, String content, int projectId) {
+        if (content.equals("")) {
+            return false;
+        }
+        try {
+            Report report = new Report();
+            Project project = new Project();
+            project.setId(projectId);
+            User user = new User();
+            user.setId(userId);
+            report.setProject(project);
+            report.setReporter(user);
+            report.setContent(content);
+            reportRepository.saveAndFlush(report);
+            return true;
         } catch (Exception e) {
             return false;
         }

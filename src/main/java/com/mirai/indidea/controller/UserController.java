@@ -6,6 +6,7 @@ import com.mirai.indidea.dto.Userdto.LoginDto;
 import com.mirai.indidea.dto.Userdto.UserRegisterDto;
 import com.mirai.indidea.dto.Userdto.UserUpdateDto;
 import com.mirai.indidea.entity.Project;
+import com.mirai.indidea.entity.Sponsor;
 import com.mirai.indidea.entity.User;
 import com.mirai.indidea.service.UserService;
 import com.mirai.indidea.utils.JwtUtils;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -136,5 +138,50 @@ public class UserController {
     @DeleteMapping("/{id}")
     public boolean deleteUser(@PathVariable int id) {
         return userService.delete(id);
+    }
+
+    //TODO d
+    @UserLoginToken
+    @GetMapping("/pointList")
+    public ResultDto<Object> pointList(HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(userService.pointList(userId));
+    }
+    //TODO d
+    @UserLoginToken
+    @GetMapping("/addPoint")
+    public ResultDto<Object> addPoint(@RequestParam("point") int point,
+                                      HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(userService.addPoint(userId, point));
+    }
+    //TODO do
+    @UserLoginToken
+    @GetMapping("/supportNum")
+    public ResultDto<Object> supportNum(HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(userService.supportNum(userId));
+    }
+    //TODO do
+    @UserLoginToken
+    @GetMapping("/myFavProject")
+    public ResultDto<Object> myFavProject(HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(userService.myFavProject(userId));
+    }
+    //TODO do
+    @UserLoginToken
+    @GetMapping("/mySupport")
+    public ResultDto<Object> mySupport(HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        List<Sponsor> sponsors = userService.muSupport(userId);
+        List<Sponsor> newList = new LinkedList<>();
+        for (Sponsor s : sponsors) {
+            boolean b = newList.stream().anyMatch(s1 -> s1.getProject().getId() == s.getProject().getId());
+            if (!b){
+                newList.add(s);
+            }
+        }
+        return ResultUtils.success(newList);
     }
 }

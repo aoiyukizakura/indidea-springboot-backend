@@ -10,4 +10,7 @@ public interface SponsorRepository extends JpaRepository<Sponsor, Integer> {
     List<Sponsor> findByProjectId(int id);
 
     long countByProjectIdAndSponsorId(int project_id, int sponsor_id);
+
+    long countBySponsorId(int sponsor_id);
+    List<Sponsor> findBySponsorId(int sponsor_id);
 }

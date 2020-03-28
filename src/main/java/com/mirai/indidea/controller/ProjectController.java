@@ -199,6 +199,7 @@ public class ProjectController {
         return ResultUtils.success(projectService.quzList(projectId));
     }
 
+    @UserLoginToken
     @PostMapping("/addQuz")
     public ResultDto<Object> addQuz(@RequestParam("quz") String quz,
                                     @RequestParam("projectId") int projectId,
@@ -206,19 +207,41 @@ public class ProjectController {
         int user_id = JwtUtils.getIdInRequest(request);
         return ResultUtils.success(projectService.addQuz(user_id, quz, projectId));
     }
+    //TODO do
+    @UserLoginToken
+    @PostMapping("/replyQuz/{id}")
+    public ResultDto<Object> replyQuz(@PathVariable int id,
+                                      @RequestParam("reply") String reply,
+                                      HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(projectService.replyQuz(userId, reply, id));
+    }
 
     @GetMapping("/logList")
     public ResultDto<Object> logList(@RequestParam("projectId") int projectId) {
         return ResultUtils.success(projectService.logList(projectId));
     }
-
-    @GetMapping("/msgList")
-    public ResultDto<Object> msgList(@RequestParam("projectId") int projectId,
-                                     HttpServletRequest request) {
-        int user_id = JwtUtils.getIdInRequest(request);
-        return ResultUtils.success(projectService.msgList(projectId, user_id));
+    //TODO do
+    @UserLoginToken
+    @PutMapping("/updateLog/{id}")
+    public ResultDto<Object> updateLog(@PathVariable int projectId,
+                                       @RequestParam("content") String content,
+                                       @RequestParam("title") String title, HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        Project project = projectService.findProject(projectId);
+        if (project == null) {
+            return ResultUtils.fail();
+        } else {
+            return ResultUtils.success(projectService.updateLog(projectId, title, content, userId));
+        }
     }
 
+    @GetMapping("/msgList")
+    public ResultDto<Object> msgList(@RequestParam("projectId") int projectId) {
+        return ResultUtils.success(projectService.msgList(projectId));
+    }
+
+    @UserLoginToken
     @PostMapping("/addMsg")
     public ResultDto<Object> addMsg(@RequestParam("projectId") int projectId,
                                     @RequestParam("content") String content,
@@ -227,6 +250,14 @@ public class ProjectController {
         return ResultUtils.success(projectService.addMsg(projectId, user_id, content));
     }
 
+    @UserLoginToken
+    @PostMapping("/report")
+    public ResultDto<Object> report(@RequestParam("projectId") int projectId,
+                                    @RequestParam("content") String content,
+                                    HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(projectService.report(userId,content,projectId));
+    }
 
 //    @UserLoginToken
 //    @PutMapping("/saveBasic")

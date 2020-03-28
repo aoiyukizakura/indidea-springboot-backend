@@ -51,10 +51,15 @@ public interface ProjectService {
      */
     List<Projectquz> quzList(int projectId);
     boolean addQuz(int user_id, String quzcontent, int project_id);
+    boolean replyQuz(int userId, String reply, int quzId);
 
     List<Log> logList(int projectId);
 
-    List<Msgboard> msgList(int projectId, int user_id);
+    List<Msgboard> msgList(int projectId);
 
     boolean addMsg(int projectId, int user_id, String content);
+
+    boolean report(int userId, String content, int projectId);
+
+    boolean updateLog(int projectId, String title, String content, int userId);
 }
