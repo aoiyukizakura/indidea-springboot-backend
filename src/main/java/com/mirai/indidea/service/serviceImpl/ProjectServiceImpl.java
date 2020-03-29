@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -306,7 +305,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Projectquz> quzList(int projectId) {
-        return projectquzRepository.findByStatusAndProjectId(1, projectId);
+        return projectquzRepository.findByStatusAndProjectIdOrderByUpdatedatDesc(1, projectId);
     }
 
     @Override
@@ -328,13 +327,23 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<Projectquz> waitReply(int id) {
+        try {
+            return projectquzRepository.findByStatusAndProjectId(0, id);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
     public boolean replyQuz(int userId, String reply, int quzId) {
         try {
             Projectquz projectquz = projectquzRepository.findById(quzId);
-            if (projectquz.getProject().getId() != userId) {
+            if (projectquz.getProject().getOwner().getId() != userId) {
                 return false;
             }
             projectquz.setAncontent(reply);
+            projectquz.setStatus(1);
             projectquzRepository.saveAndFlush(projectquz);
             return true;
         } catch (Exception e) {

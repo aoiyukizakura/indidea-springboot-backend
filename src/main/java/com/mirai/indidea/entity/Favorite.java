@@ -5,7 +5,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -14,8 +14,8 @@ public class Favorite {
     private int id;
     private User user;
     private Project project;
-    private Date createdat;
-    private Date updatedat;
+    private Timestamp createdat;
+    private Timestamp updatedat;
     private int status = 1;
 
     @Id
@@ -50,22 +50,22 @@ public class Favorite {
     @Basic
     @Column(name = "createdat", nullable = true)
     @CreatedDate
-    public Date getCreatedat() {
+    public Timestamp getCreatedat() {
         return createdat;
     }
 
-    public void setCreatedat(Date createdat) {
+    public void setCreatedat(Timestamp createdat) {
         this.createdat = createdat;
     }
 
     @Basic
     @Column(name = "updatedat", nullable = true)
     @LastModifiedDate
-    public Date getUpdatedat() {
+    public Timestamp getUpdatedat() {
         return updatedat;
     }
 
-    public void setUpdatedat(Date updatedat) {
+    public void setUpdatedat(Timestamp updatedat) {
         this.updatedat = updatedat;
     }
 

@@ -4,6 +4,7 @@ import com.mirai.indidea.dto.Userdto.LoginDto;
 import com.mirai.indidea.dto.Userdto.UserRegisterDto;
 import com.mirai.indidea.dto.Userdto.UserUpdateDto;
 import com.mirai.indidea.entity.*;
+import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -21,12 +22,18 @@ public interface UserService {
     List<Project> findMyProject(Integer id);
 
     List<Point> pointList(int userId);
+    List<Point> pointList(int idInRequest, Pageable pageable);
+
     boolean addPoint(int userId, int point);
 
     long supportNum(int userId);
 
-    List<Favorite> myFavProject(int userId);
+    List<Favorite> myFavProject(int userId, Pageable pageable);
+    long myFavProject(int userId);
 
     List<Sponsor> muSupport(int userId);
+
+    List<Sponsor> supportHistory(int projectId, int idInRequest);
+
 }
 

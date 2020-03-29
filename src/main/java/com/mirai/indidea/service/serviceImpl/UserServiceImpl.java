@@ -8,6 +8,7 @@ import com.mirai.indidea.entity.*;
 import com.mirai.indidea.service.UserService;
 import com.mirai.indidea.utils.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -142,7 +143,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Point> pointList(int userId) {
-        return pointRepository.findByUserId(userId);
+        return pointRepository.findByUserIdOrderByUpdatedatDesc(userId);
+    }
+
+    @Override
+    public List<Point> pointList(int idInRequest, Pageable pageable) {
+        return pointRepository.findByUserIdOrderByUpdatedatDesc(idInRequest, pageable);
     }
 
     @Override
@@ -173,12 +179,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Favorite> myFavProject(int userId) {
-        return favoriteRepository.findByUserId(userId);
+    public List<Favorite> myFavProject(int userId, Pageable pageable) {
+        return favoriteRepository.findByUserId(userId, pageable);
+    }
+
+    @Override
+    public long myFavProject(int userId) {
+        return favoriteRepository.countByUserId(userId);
     }
 
     @Override
     public List<Sponsor> muSupport(int userId) {
         return sponsorRepository.findBySponsorId(userId);
+    }
+
+    @Override
+    public List<Sponsor> supportHistory(int projectId, int idInRequest) {
+        return sponsorRepository.findByProjectIdAndSponsorId(projectId, idInRequest);
     }
 }

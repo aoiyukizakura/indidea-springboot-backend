@@ -2,6 +2,7 @@ package com.mirai.indidea.controller;
 
 import com.auth0.jwt.JWT;
 import com.mirai.indidea.annotation.UserLoginToken;
+import com.mirai.indidea.dto.ProjectDto.LogDto.UpdateLogDto;
 import com.mirai.indidea.dto.ProjectDto.QueryDto;
 import com.mirai.indidea.dto.ProjectDto.UpdateProjectDto;
 import com.mirai.indidea.dto.Result.ResultDto;
@@ -217,22 +218,28 @@ public class ProjectController {
         return ResultUtils.success(projectService.replyQuz(userId, reply, id));
     }
 
+    @UserLoginToken
+    @GetMapping("/waitReply/{id}")
+    public ResultDto<Object> waitReply(@PathVariable int id) {
+        return ResultUtils.success(projectService.waitReply(id));
+    }
+
     @GetMapping("/logList")
     public ResultDto<Object> logList(@RequestParam("projectId") int projectId) {
         return ResultUtils.success(projectService.logList(projectId));
     }
     //TODO do
     @UserLoginToken
-    @PutMapping("/updateLog/{id}")
+    @PutMapping("/updateLog/{projectId}")
     public ResultDto<Object> updateLog(@PathVariable int projectId,
-                                       @RequestParam("content") String content,
-                                       @RequestParam("title") String title, HttpServletRequest request) {
+                                       @RequestBody UpdateLogDto dto,
+                                       HttpServletRequest request) {
         int userId = JwtUtils.getIdInRequest(request);
         Project project = projectService.findProject(projectId);
         if (project == null) {
             return ResultUtils.fail();
         } else {
-            return ResultUtils.success(projectService.updateLog(projectId, title, content, userId));
+            return ResultUtils.success(projectService.updateLog(projectId, dto.getTitle(), dto.getContent(), userId));
         }
     }
 

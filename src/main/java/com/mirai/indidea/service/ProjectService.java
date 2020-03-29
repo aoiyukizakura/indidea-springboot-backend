@@ -4,8 +4,6 @@ import com.mirai.indidea.dto.ProjectDto.UpdateProjectDto;
 import com.mirai.indidea.entity.*;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -62,4 +60,6 @@ public interface ProjectService {
     boolean report(int userId, String content, int projectId);
 
     boolean updateLog(int projectId, String title, String content, int userId);
+
+    List<Projectquz> waitReply(int id);
 }

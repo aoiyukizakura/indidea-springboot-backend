@@ -5,6 +5,7 @@ import com.mirai.indidea.dto.Result.ResultDto;
 import com.mirai.indidea.dto.Userdto.LoginDto;
 import com.mirai.indidea.dto.Userdto.UserRegisterDto;
 import com.mirai.indidea.dto.Userdto.UserUpdateDto;
+import com.mirai.indidea.entity.Point;
 import com.mirai.indidea.entity.Project;
 import com.mirai.indidea.entity.Sponsor;
 import com.mirai.indidea.entity.User;
@@ -13,15 +14,15 @@ import com.mirai.indidea.utils.JwtUtils;
 import com.mirai.indidea.utils.ResultUtils;
 import com.mirai.indidea.utils.UploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -142,14 +143,21 @@ public class UserController {
 
     //TODO d
     @UserLoginToken
-    @GetMapping("/pointList")
-    public ResultDto<Object> pointList(HttpServletRequest request) {
-        int userId = JwtUtils.getIdInRequest(request);
-        return ResultUtils.success(userService.pointList(userId));
+    @GetMapping("/pointList/{pageIndex}/{pageSize}")
+    public ResultDto<Object> pointList(@PathVariable Integer pageIndex,
+                                       @PathVariable Integer pageSize,
+                                       HttpServletRequest request) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+        int pointNum = userService.pointList(JwtUtils.getIdInRequest(request)).size();
+        List<Point> points = userService.pointList(JwtUtils.getIdInRequest(request), pageable);
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", points);
+        map.put("total", pointNum);
+        return ResultUtils.success(map);
     }
     //TODO d
     @UserLoginToken
-    @GetMapping("/addPoint")
+    @PutMapping("/addPoint")
     public ResultDto<Object> addPoint(@RequestParam("point") int point,
                                       HttpServletRequest request) {
         int userId = JwtUtils.getIdInRequest(request);
@@ -164,16 +172,25 @@ public class UserController {
     }
     //TODO do
     @UserLoginToken
-    @GetMapping("/myFavProject")
-    public ResultDto<Object> myFavProject(HttpServletRequest request) {
+    @GetMapping("/myFavProject/{pageIndex}/{pageSize}")
+    public ResultDto<Object> myFavProject(@PathVariable int pageIndex,
+                                          @PathVariable int pageSize,
+                                          HttpServletRequest request) {
         int userId = JwtUtils.getIdInRequest(request);
-        return ResultUtils.success(userService.myFavProject(userId));
+        Pageable pageable = PageRequest.of(pageIndex, pageSize, Sort.by("createdat").descending());
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", userService.myFavProject(userId, pageable));
+        map.put("total", userService.myFavProject(userId));
+        return ResultUtils.success(map);
     }
     //TODO do
     @UserLoginToken
     @GetMapping("/mySupport")
     public ResultDto<Object> mySupport(HttpServletRequest request) {
         int userId = JwtUtils.getIdInRequest(request);
+        Map<String, Object> map = new HashMap<>();
+        LinkedList<Integer> integers = new LinkedList<>();
+        int total = 0;
         List<Sponsor> sponsors = userService.muSupport(userId);
         List<Sponsor> newList = new LinkedList<>();
         for (Sponsor s : sponsors) {
@@ -182,6 +199,25 @@ public class UserController {
                 newList.add(s);
             }
         }
-        return ResultUtils.success(newList);
+        for (Sponsor sponsor : newList) {
+            for (Sponsor s : sponsors) {
+                if (sponsor.getProject().getId() == s.getProject().getId()) {
+                    total += s.getPoint();
+                }
+            }
+            integers.add(total);
+            total = 0;
+        }
+        map.put("lists", newList);
+        map.put("total", integers);
+        return ResultUtils.success(map);
+    }
+
+    @UserLoginToken
+    @GetMapping("/supportHistory")
+    public ResultDto<Object> supportHistory(@RequestParam("projectId") int projectId,
+                                            HttpServletRequest request) {
+        List<Sponsor> sponsors = userService.supportHistory(projectId, JwtUtils.getIdInRequest(request));
+        return ResultUtils.success(sponsors);
     }
 }
