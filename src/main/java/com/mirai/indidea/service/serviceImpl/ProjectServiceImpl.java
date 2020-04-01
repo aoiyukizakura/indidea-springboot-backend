@@ -272,6 +272,9 @@ public class ProjectServiceImpl implements ProjectService {
             reward = rewardRepository.findById(rewardId);
             if (reward.getPoint() > point) return false;
         }
+        if (point<=0) {
+            return false;
+        }
         Integer balance = user.getBalance();
         Integer projectPoint = project.getGetpoint();
         String order = "support-project-" + project.getId() + "-user-" + user.getId() + "-" + ft.format(dNow);

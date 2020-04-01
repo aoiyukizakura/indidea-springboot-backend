@@ -16,7 +16,8 @@ public class TestController {
     @PostMapping("/post")
     public ResultDto<Object> sendpost(@RequestParam("userId") Integer userId,
                                       @RequestParam("content") String content){
-        boolean i = postService.sendPost(content, userId);
+        String images = "";
+        boolean i = postService.sendPost(content, images, userId);
         return ResultUtils.success(i);
     }
 

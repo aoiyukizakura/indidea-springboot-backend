@@ -11,6 +11,7 @@ import com.mirai.indidea.entity.Sponsor;
 import com.mirai.indidea.entity.User;
 import com.mirai.indidea.service.UserService;
 import com.mirai.indidea.utils.JwtUtils;
+import com.mirai.indidea.utils.MD5Utils;
 import com.mirai.indidea.utils.ResultUtils;
 import com.mirai.indidea.utils.UploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,11 +109,31 @@ public class UserController {
     }
 
     @UserLoginToken
+    @PutMapping("/updatePass")
+    public ResultDto<Object> updatePass(@RequestParam("oldpass") String oldpass,
+                                        @RequestParam("newpass") String newpass,
+                                        HttpServletRequest request) {
+        User user = userService.find(JwtUtils.getIdInRequest(request));
+        if(MD5Utils.crypt(oldpass).equals(user.getPassword())) {
+            UserUpdateDto updateDto = new UserUpdateDto();
+            updateDto.setPassword(newpass);
+            this.update(updateDto, request);
+            return ResultUtils.success(true);
+        } else {
+            return ResultUtils.fail();
+        }
+    }
+
+    @UserLoginToken
     @PostMapping("/avatar")
     public ResultDto<Object> uploadAvatar( @RequestParam("avatar") MultipartFile file,
             HttpServletRequest request ) {
         String fileName = UploadUtils.Upload(file);
         UserUpdateDto userUpdateDto = new UserUpdateDto();
+        User user = userService.find(JwtUtils.getIdInRequest(request));
+        if(user.getAvatar() != null) {
+            UploadUtils.Delete(user.getAvatar());
+        }
         userUpdateDto.setAvatar(fileName);
         userService.update(userUpdateDto, JwtUtils.getIdInRequest(request));
         return ResultUtils.Result(200, "上传成功", fileName);
