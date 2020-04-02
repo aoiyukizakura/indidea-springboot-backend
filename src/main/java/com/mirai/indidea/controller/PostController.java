@@ -1,5 +1,6 @@
 package com.mirai.indidea.controller;
 
+import com.mirai.indidea.annotation.UserLoginToken;
 import com.mirai.indidea.dao.PostCommentRepository;
 import com.mirai.indidea.dto.Result.ResultDto;
 import com.mirai.indidea.entity.Post;
@@ -20,9 +21,34 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping()
-    public ResultDto<Object> postList() {
-        return ResultUtils.success(postService.postList());
+    /**
+     * 获取post列表
+     * @param status 获取列表状态，0 全部列表， 1 我喜欢的列表, 2 我发表的
+     * @param request 请求头
+     * @return ResultDto
+     */
+    @GetMapping("/{status}")
+    public ResultDto<Object> postList(@PathVariable int status,
+                                      @RequestParam("page") int page,
+                                      @RequestParam("pageSize") int pageSize,
+                                      HttpServletRequest request) {
+        String token = request.getHeader("token");
+        int offset = (page - 1) * pageSize;
+        if (token == null || token.equals("")) {
+            if (status == 0) {
+                return ResultUtils.success(postService.postList(0, pageSize, offset));
+            } else {
+                return ResultUtils.success(null);
+            }
+        } else {
+            int userId = JwtUtils.getIdInRequest(request);
+            if (status == 1)
+                return ResultUtils.success(postService.postLikeList(userId, pageSize, offset));
+            else if (status == 2)
+                return ResultUtils.success(postService.mypostList(userId, pageSize, offset));
+            else
+                return ResultUtils.success(postService.postList(userId, pageSize, offset));
+        }
     }
 
     @GetMapping("/commentByPostId/{postId}")
@@ -58,9 +84,9 @@ public class PostController {
         int uid = JwtUtils.getIdInRequest(request);
         String status = postService.checkLike(postId, uid);
         Postlike postlike = new Postlike();
-        if (status.equals("like")) {
+        if (status.equals("is_like")) {
             return ResultUtils.success(postService.unLike(postId, uid));
-        } else if (status.equals("unlike")) {
+        } else if (status.equals("is_unlike")) {
             Post post = new Post();
             post.setId(postId);
             User user = new User();

@@ -101,7 +101,8 @@ public class AdminController {
 
     @AdminToken
     @GetMapping("/reportList")
-    public ResultDto<Object> reportList(@RequestParam("pageIndex") int pageNum, @RequestParam("pageSize") int pageSize,
+    public ResultDto<Object> reportList(@RequestParam("pageIndex") int pageNum,
+                                        @RequestParam("pageSize") int pageSize,
                                         @RequestParam("status") Integer status) {
         List<Report> reports = adminService.allReport(status);
         return ResultUtils.pager(reports, pageNum, pageSize);

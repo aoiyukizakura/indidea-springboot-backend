@@ -12,7 +12,7 @@ public interface PostService {
     Post findOne(int id);
     boolean sendPost(String content, String images, Integer userId);
 
-    List<Map<String, Object>> postList();
+    List<Map<String, Object>> postList(int user_id, int limit, int offset);
     long likeNum(int postId);
     long commentNum(int postId);
 
@@ -27,4 +27,8 @@ public interface PostService {
     String checkLike(int postId, int uid);
 
     boolean unLike(int postId, int uid);
+
+    List<Map<String, Object>> postLikeList(int idInRequest, int limit, int offset);
+
+    List<Map<String, Object>> mypostList(int userId, int limit, int offset);
 }

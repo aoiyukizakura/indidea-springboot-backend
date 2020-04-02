@@ -8,6 +8,7 @@ import com.mirai.indidea.entity.Postcomment;
 import com.mirai.indidea.entity.Postlike;
 import com.mirai.indidea.entity.User;
 import com.mirai.indidea.service.PostService;
+import com.mirai.indidea.utils.UploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,8 +56,18 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Map<String, Object>> postList() {
-        return postRepository.findByStatus();
+    public List<Map<String, Object>> postList(int user_id, int limit, int offset) {
+        return postRepository.findByStatus(user_id, limit, offset);
+    }
+
+    @Override
+    public List<Map<String, Object>> postLikeList(int idInRequest, int limit, int offset) {
+        return postRepository.findUserLikeList(idInRequest,limit, offset);
+    }
+
+    @Override
+    public List<Map<String, Object>> mypostList(int userId, int limit, int offset) {
+        return postRepository.findUserList(userId, limit, offset);
     }
 
     @Override
@@ -95,6 +106,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public boolean deletePost(Post post) {
         try {
+            String files = post.getCover();
+            if (!files.equals("")) {
+                String[] fileList = files.split(",");
+                for (String f :
+                        fileList) {
+                    UploadUtils.Delete(f);
+                }
+            }
             postRepository.delete(post);
             return true;
         } catch (Exception e) {
@@ -116,9 +135,9 @@ public class PostServiceImpl implements PostService {
     public String checkLike(int postId, int uid) {
         Postlike postlike = postlikeRepository.findByUserIdAndPostId(uid, postId);
         if (postlike != null) {
-            return "like";
+            return "is_like";
         } else {
-            return "unlike";
+            return "is_unlike";
         }
     }
 
