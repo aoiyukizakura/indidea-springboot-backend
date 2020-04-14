@@ -28,7 +28,7 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
     List<Project> findProjectsByStatus(Integer status);
     List<Project> findProjectsByStatusAndCategoryId(Integer status, Integer category_id);
 
-    List<Project> findTop9ByStatusAndTargetdateAfterOrderByUpdatedatDesc(Integer status, Date targetdate);
+    List<Project> findTop9ByStatusAndTargetdateAfterOrderByOnlinetimeDesc(Integer status, Date targetdate);
 
     List<Project> findProjectsByStatusAndTitleLike(Integer status, String title);
     List<Project> findProjectsByStatusAndTitleLikeAndCategoryId(Integer status, String title, Integer category_id);

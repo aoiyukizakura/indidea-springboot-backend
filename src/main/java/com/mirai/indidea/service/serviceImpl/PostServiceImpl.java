@@ -82,7 +82,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Postcomment> commentByPostId(int postId) {
-        return commentRepository.findPostcommentsByPostId(postId);
+        return commentRepository.findPostcommentsByPostIdAndStatus(postId, 1);
     }
 
     @Override

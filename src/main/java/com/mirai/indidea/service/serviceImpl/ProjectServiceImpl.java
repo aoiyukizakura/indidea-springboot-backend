@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -106,7 +107,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Project> top9Project() {
-        return projectRepository.findTop9ByStatusAndTargetdateAfterOrderByUpdatedatDesc(1, new Date());
+        return projectRepository.findTop9ByStatusAndTargetdateAfterOrderByOnlinetimeDesc(1, new Date());
     }
 
     @Override
@@ -154,9 +155,8 @@ public class ProjectServiceImpl implements ProjectService {
     public Project sendProject(Integer projectId) {
         Project p = projectRepository.findProjectById(projectId);
         p.setStatus(1);
+        p.setOnlinetime(new Timestamp(new Date().getTime()));
         return projectRepository.saveAndFlush(p);
-
-
     }
 
     /**

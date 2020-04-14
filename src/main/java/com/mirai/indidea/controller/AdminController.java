@@ -131,7 +131,12 @@ public class AdminController {
                                        @RequestParam("status") int status) {
         return ResultUtils.success(adminService.doProject(projectId, status));
     }
-
+    @AdminToken
+    @PutMapping("/{projectId}/projectStatus/{status}")
+    public ResultDto<Object> do2Project(@PathVariable int projectId,
+                                       @PathVariable int status) {
+        return ResultUtils.success(adminService.doProject(projectId, status));
+    }
     /** 帖子 **/
     @AdminToken
     @GetMapping("/postList")

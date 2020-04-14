@@ -96,18 +96,23 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public boolean doProject(int projectId, int flag) {
         try {
-            if (flag == 5) {
-                Project p2 = projectRepository.findProjectByStatus(5);
-                p2.setStatus(1);
-                projectRepository.saveAndFlush(p2);
+            List<Integer> a = Arrays.asList(1,2,3,4,5,6);
+            if (a.contains(flag)) {
+                if (flag == 5) {
+                    Project p2 = projectRepository.findProjectByStatus(5);
+                    p2.setStatus(1);
+                    projectRepository.saveAndFlush(p2);
+                }
+                Project p = projectRepository.findProjectById(projectId);
+                p.setStatus(flag);
+                projectRepository.saveAndFlush(p);
+                return true;
+            } else {
+                return false;
             }
-            Project p = projectRepository.findProjectById(projectId);
-            p.setStatus(flag);
-            projectRepository.saveAndFlush(p);
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return  false;
+            return false;
         }
     }
 

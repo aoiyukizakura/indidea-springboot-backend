@@ -9,7 +9,8 @@ public interface PostCommentRepository extends JpaRepository<Postcomment, Intege
 
     List<Postcomment> findPostcommentsByStatusAndPostId(Integer status, Integer post_id);
 
-    List<Postcomment> findPostcommentsByPostId(Integer post_id);
+    List<Postcomment> findPostcommentsByPostIdAndStatus(int post_id, int status);
+    List<Postcomment> findPostcommentsByPostId(int post_id);
     Postcomment findPostcommentById(Integer id);
 
     Integer countByPostId(Integer post_id);

@@ -58,6 +58,14 @@ public class ProjectController {
         return ResultUtils.success(projectService.update(updateProjectDto));
     }
 
+    @UserLoginToken
+    @PutMapping("/{projectId}/update")
+    public ResultDto<Object> update2(@Valid @RequestBody UpdateProjectDto updateProjectDto,
+                                     @PathVariable int projectId) {
+        updateProjectDto.setId(projectId);
+        return ResultUtils.success(projectService.update(updateProjectDto));
+    }
+
     @GetMapping("/top9Project")
     public ResultDto<Object> top9Project() {
         return ResultUtils.success(projectService.top9Project());
@@ -200,6 +208,11 @@ public class ProjectController {
         return ResultUtils.success(projectService.quzList(projectId));
     }
 
+    @GetMapping("/{projectId}/quzList")
+    public ResultDto<Object> quz2List(@PathVariable int projectId) {
+        return ResultUtils.success(projectService.quzList(projectId));
+    }
+
     @UserLoginToken
     @PostMapping("/addQuz")
     public ResultDto<Object> addQuz(@RequestParam("quz") String quz,
@@ -251,6 +264,15 @@ public class ProjectController {
     @UserLoginToken
     @PostMapping("/addMsg")
     public ResultDto<Object> addMsg(@RequestParam("projectId") int projectId,
+                                    @RequestParam("content") String content,
+                                    HttpServletRequest request) {
+        int user_id = JwtUtils.getIdInRequest(request);
+        return ResultUtils.success(projectService.addMsg(projectId, user_id, content));
+    }
+
+    @UserLoginToken
+    @PostMapping("/{projectId}/addMsg")
+    public ResultDto<Object> add2Msg(@PathVariable int projectId,
                                     @RequestParam("content") String content,
                                     HttpServletRequest request) {
         int user_id = JwtUtils.getIdInRequest(request);

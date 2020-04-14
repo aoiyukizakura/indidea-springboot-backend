@@ -6,6 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -28,6 +29,7 @@ public class Project {
     private String publishtitle;
     private Date createdat;
     private Date updatedat;
+    private Timestamp onlinetime;
     private Integer status = 0;
     private Category category;
     private Integer hittime = 0;
@@ -192,6 +194,16 @@ public class Project {
 
     public void setUpdatedat(Date updatedat) {
         this.updatedat = updatedat;
+    }
+
+    @Basic
+    @Column(name = "onlinetime", nullable = true)
+    public Timestamp getOnlinetime() {
+        return onlinetime;
+    }
+
+    public void setOnlinetime(Timestamp onlinetime) {
+        this.onlinetime = onlinetime;
     }
 
     @Basic
