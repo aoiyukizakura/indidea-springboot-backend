@@ -59,8 +59,12 @@ public class PostController {
     @PostMapping("/doPost")
     public ResultDto<Object> doPost(@RequestParam("content") String content,
                                     @RequestParam("images") String images,
+                                    @RequestParam(value = "projectId", required = false, defaultValue = "0") Integer project_id,
                                     HttpServletRequest request) {
-        return ResultUtils.success(postService.sendPost(content, images, JwtUtils.getIdInRequest(request)));
+        if (project_id == null) {
+            project_id = 0;
+        }
+        return ResultUtils.success(postService.sendPost(content, images, JwtUtils.getIdInRequest(request), project_id));
     }
 
     @PostMapping("/doComment/{postId}")

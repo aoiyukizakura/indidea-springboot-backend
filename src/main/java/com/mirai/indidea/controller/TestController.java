@@ -13,14 +13,6 @@ public class TestController {
     @Autowired
     PostService postService;
 
-    @PostMapping("/post")
-    public ResultDto<Object> sendpost(@RequestParam("userId") Integer userId,
-                                      @RequestParam("content") String content){
-        String images = "";
-        boolean i = postService.sendPost(content, images, userId);
-        return ResultUtils.success(i);
-    }
-
     @GetMapping("/post")
     public ResultDto<Object> post() {
         return ResultUtils.success(postService.allPost(1,""));

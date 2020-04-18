@@ -3,10 +3,7 @@ package com.mirai.indidea.service.serviceImpl;
 import com.mirai.indidea.dao.PostCommentRepository;
 import com.mirai.indidea.dao.PostRepository;
 import com.mirai.indidea.dao.PostlikeRepository;
-import com.mirai.indidea.entity.Post;
-import com.mirai.indidea.entity.Postcomment;
-import com.mirai.indidea.entity.Postlike;
-import com.mirai.indidea.entity.User;
+import com.mirai.indidea.entity.*;
 import com.mirai.indidea.service.PostService;
 import com.mirai.indidea.utils.UploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +37,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public boolean sendPost(String content, String images, Integer userId) {
+    public boolean sendPost(String content, String images, Integer userId, Integer project_id) {
         try{
             Post post = new Post();
             post.setContent(content);
@@ -48,9 +45,13 @@ public class PostServiceImpl implements PostService {
             user.setId(userId);
             post.setUser(user);
             post.setCover(images);
+            if (project_id != 0) {
+                post.setProject(project_id);
+            }
             postRepository.saveAndFlush(post);
             return true;
         }catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }

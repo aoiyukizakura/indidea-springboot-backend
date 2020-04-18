@@ -10,7 +10,7 @@ import java.util.Map;
 public interface PostService {
     List<Post> allPost(Integer status, String content);
     Post findOne(int id);
-    boolean sendPost(String content, String images, Integer userId);
+    boolean sendPost(String content, String images, Integer userId, Integer project_id);
 
     List<Map<String, Object>> postList(int user_id, int limit, int offset);
     long likeNum(int postId);

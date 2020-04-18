@@ -18,6 +18,7 @@ public class Post {
     private Timestamp updatedat;
     private Integer status = 1;
     private String cover;
+    private Integer project_id = null;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,6 +90,16 @@ public class Post {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    @Basic
+    @Column(name = "project_id", nullable = true)
+    public Integer getProject() {
+        return project_id;
+    }
+
+    public void setProject(Integer project_id) {
+        this.project_id = project_id;
     }
 
     @Override
