@@ -152,6 +152,12 @@ public class UserController {
         return ResultUtils.success(projectList);
     }
 
+    @UserLoginToken
+    @GetMapping("/checkApplyStatus")
+    public ResultDto<Object> checkApplyStatus(HttpServletRequest request) {
+        return ResultUtils.success(userService.getApplyStatus(JwtUtils.getIdInRequest(request)));
+    }
+
     /**
      * 禁用用户
      * @param id 用户id
@@ -184,7 +190,7 @@ public class UserController {
         int userId = JwtUtils.getIdInRequest(request);
         return ResultUtils.success(userService.addPoint(userId, point));
     }
-    //TODO do
+
     @UserLoginToken
     @GetMapping("/supportNum")
     public ResultDto<Object> supportNum(HttpServletRequest request) {
@@ -204,7 +210,7 @@ public class UserController {
         map.put("total", userService.myFavProject(userId));
         return ResultUtils.success(map);
     }
-    //TODO do
+
     @UserLoginToken
     @GetMapping("/mySupport")
     public ResultDto<Object> mySupport(HttpServletRequest request) {
@@ -240,5 +246,11 @@ public class UserController {
                                             HttpServletRequest request) {
         List<Sponsor> sponsors = userService.supportHistory(projectId, JwtUtils.getIdInRequest(request));
         return ResultUtils.success(sponsors);
+    }
+
+    @UserLoginToken
+    @PostMapping("/doApply")
+    public ResultDto<Object> doApply(HttpServletRequest request) {
+        return ResultUtils.success(userService.doApply(JwtUtils.getIdInRequest(request)));
     }
 }

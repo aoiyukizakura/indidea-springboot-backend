@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private FavoriteRepository favoriteRepository;
 
+    @Autowired
+    private ApplyRepository applyRepository;
+
     /**
      * 查找用户详细信息
      * @param id 用户id
@@ -155,6 +158,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean addPoint(int userId, int point) {
         try {
+            if (point <= 0) {
+                return false;
+            }
             Date dNow = new Date( );
             SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
             String order = "top-up-balance-point-" + point + "-user-" + userId + "-time-" + ft.format(dNow);
@@ -198,4 +204,29 @@ public class UserServiceImpl implements UserService {
     public List<Sponsor> supportHistory(int projectId, int idInRequest) {
         return sponsorRepository.findByProjectIdAndSponsorId(projectId, idInRequest);
     }
+
+    @Override
+    public boolean getApplyStatus(int idInRequest) {
+        try {
+            return applyRepository.countByStatusAndUserId(1, idInRequest) > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean doApply(Integer idInRequest) {
+        try {
+            Apply apply = new Apply();
+            User user = new User();
+            user.setId(idInRequest);
+            apply.setUser(user);
+            applyRepository.saveAndFlush(apply);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

@@ -62,4 +62,8 @@ public interface ProjectService {
     boolean updateLog(int projectId, String title, String content, int userId);
 
     List<Projectquz> waitReply(int id);
+
+    boolean delete(int projectId, int idInRequest);
+
+    List<Sponsor> sponsorList(int projectId);
 }

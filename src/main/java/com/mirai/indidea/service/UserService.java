@@ -35,5 +35,8 @@ public interface UserService {
 
     List<Sponsor> supportHistory(int projectId, int idInRequest);
 
+    boolean getApplyStatus(int idInRequest);
+
+    boolean doApply(Integer idInRequest);
 }
 

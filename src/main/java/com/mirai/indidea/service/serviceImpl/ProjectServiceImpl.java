@@ -425,4 +425,26 @@ public class ProjectServiceImpl implements ProjectService {
             return false;
         }
     }
+
+    @Override
+    public boolean delete(int projectId, int idInRequest) {
+        Project p = projectRepository.findProjectById(projectId);
+        if (p.getOwner().getId() == idInRequest) {
+            try {
+                projectRepository.delete(p);
+                projectRepository.flush();
+                return true;
+            }catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public List<Sponsor> sponsorList(int projectId) {
+        return sponsorRepository.findByProjectId(projectId);
+    }
 }

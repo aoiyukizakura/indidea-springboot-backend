@@ -9,4 +9,5 @@ public interface ApplyRepository extends JpaRepository<Apply, Integer> {
     List<Apply> findByStatusAndEditbyLike(int status, String editby);
     List<Apply> findByStatus(int status);
     Apply findApplyById(int id);
+    long countByStatusAndUserId(int status, int user_id);
 }

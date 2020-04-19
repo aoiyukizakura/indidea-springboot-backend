@@ -288,6 +288,19 @@ public class ProjectController {
         return ResultUtils.success(projectService.report(userId,content,projectId));
     }
 
+    @UserLoginToken
+    @DeleteMapping("/{projectId}")
+    public ResultDto<Object> deleteProject(@PathVariable int projectId,
+                                           HttpServletRequest request) {
+        return ResultUtils.success(projectService.delete(projectId, JwtUtils.getIdInRequest(request)));
+    }
+
+    @UserLoginToken
+    @GetMapping("/{projectId}/sponsorList")
+    public ResultDto<Object> sponsorList(@PathVariable int projectId) {
+        return ResultUtils.success(projectService.sponsorList(projectId));
+    }
+
 //    @UserLoginToken
 //    @PutMapping("/saveBasic")
 //    public ResultDto<Object> saveBasic(@RequestBody Project project) {
