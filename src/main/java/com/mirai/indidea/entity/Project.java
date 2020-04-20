@@ -34,6 +34,13 @@ public class Project {
     private Category category;
     private Integer hittime = 0;
 
+    public Project() {
+    }
+
+    public Project(int id) {
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

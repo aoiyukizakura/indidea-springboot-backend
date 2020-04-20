@@ -20,6 +20,15 @@ public class Point {
     private String serialnumber;
     private String ordernumber;
 
+    public Point() {
+    }
+
+    public Point(int point, User user, String order) {
+        this.point = point;
+        this.user = user;
+        this.ordernumber = order;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

@@ -267,7 +267,6 @@ public class ProjectServiceImpl implements ProjectService {
         User user = userRepository.findUserById(userId);
         Project project = projectRepository.findProjectById(projectId);
         Reward reward = null;
-        Point p = new Point();
         if (rewardId > 0) {
             reward = rewardRepository.findById(rewardId);
             if (reward.getPoint() > point) return false;
@@ -284,14 +283,8 @@ public class ProjectServiceImpl implements ProjectService {
                 projectPoint += point;
                 user.setBalance(balance);
                 project.setGetpoint(projectPoint);
-                Sponsor sponsor = new Sponsor();
-                sponsor.setSponsor(user);
-                sponsor.setProject(project);
-                sponsor.setPoint(point);
-                sponsor.setReward(reward);
-                p.setPoint(-point);
-                p.setUser(user);
-                p.setOrdernumber(order);
+                Sponsor sponsor = new Sponsor(user, project, point, reward);
+                Point p = new Point(-point, user, order);
                 userRepository.saveAndFlush(user);
                 projectRepository.saveAndFlush(project);
                 pointRepository.saveAndFlush(p);
@@ -387,14 +380,9 @@ public class ProjectServiceImpl implements ProjectService {
         try {
             long sponsor = sponsorRepository.countByProjectIdAndSponsorId(projectId, user_id);
             if (sponsor > 0) {
-                Msgboard msgboard = new Msgboard();
-                Project project = new Project();
-                project.setId(projectId);
-                User user = new User();
-                user.setId(user_id);
-                msgboard.setContent(content);
-                msgboard.setProject(project);
-                msgboard.setUser(user);
+                Project project = new Project(projectId);
+                User user = new User(user_id);
+                Msgboard msgboard = new Msgboard(user, project, content);
                 msgboardRepository.saveAndFlush(msgboard);
                 return true;
             } else {

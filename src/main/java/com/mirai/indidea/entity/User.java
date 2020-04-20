@@ -25,6 +25,13 @@ public class User {
     private String vanityname;
     private String avatar;
 
+    public User() {
+    }
+
+    public User(int id) {
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

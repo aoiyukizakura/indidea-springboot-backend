@@ -19,6 +19,15 @@ public class Msgboard {
     private Timestamp updatedat;
     private int status = 1;
 
+    public Msgboard() {
+    }
+
+    public Msgboard(User user, Project project, String content) {
+        this.user = user;
+        this.project = project;
+        this.content = content;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

@@ -21,6 +21,16 @@ public class Sponsor {
     private Reward reward;
     private int status = 1;
 
+    public Sponsor() {
+    }
+
+    public Sponsor(User sponsor, Project project, int point, Reward reward) {
+        this.sponsor = sponsor;
+        this.project = project;
+        this.point = point;
+        this.reward = reward;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
