@@ -31,4 +31,6 @@ public interface PostService {
     List<Map<String, Object>> postLikeList(int idInRequest, int limit, int offset);
 
     List<Map<String, Object>> mypostList(int userId, int limit, int offset);
+
+    List<Map<String, Object>> projectCommunityList(int projectId, int limit, int offset, int userId);
 }

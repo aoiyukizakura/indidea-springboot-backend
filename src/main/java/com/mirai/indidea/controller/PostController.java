@@ -50,6 +50,21 @@ public class PostController {
                 return ResultUtils.success(postService.postList(userId, pageSize, offset));
         }
     }
+    
+    @GetMapping("/community/{projectId}")
+    public ResultDto<Object> projectCommunity(@PathVariable int projectId,
+                                              @RequestParam("page") int page,
+                                              @RequestParam("pageSize") int pageSize,
+                                              HttpServletRequest request) {
+        int userId = JwtUtils.getIdInRequest(request);
+        if (userId != 0) {
+            // 已登录
+            return ResultUtils.success(postService.projectCommunityList(projectId, pageSize, (page - 1) * pageSize, userId));
+        } else {
+            // 未登录
+            return ResultUtils.fail();
+        }
+    }
 
     @GetMapping("/commentByPostId/{postId}")
     public ResultDto<Object> comment(@PathVariable int postId) {

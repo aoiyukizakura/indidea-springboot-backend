@@ -40,4 +40,13 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "left join project pro on pro.id = p.project_id " +
             "where p.status = 1 and p.user_id = :userId order by p.createdat desc limit :limit offset :offset", nativeQuery = true)
     List<Map<String, Object>> findUserList(int userId, int limit, int offset);
+
+    @Query(value = "SELECT p.id, p.user_id, p.content, p.createdat, p.updatedat, p.status, p.cover, u.username, u.avatar, pro.id as project_id, pro.title as project_title, " +
+            "(select count(*) from postlike pl where p.id = pl.post_id) as like_count, " +
+            "(select count(*) from postcomment pc where p.id = pc.post_id ) as comment_count, " +
+            "(select count(*) from postlike pl where p.id = pl.post_id and pl.user_id = :user_id) as like_check " +
+            "FROM indidea.post p left join user u on u.id = p.user_id " +
+            "left join project pro on pro.id = p.project_id " +
+            "where p.status = 1 and project_id = :projectId order by p.createdat desc limit :limit offset :offset", nativeQuery = true)
+    List<Map<String, Object>> findProjectCommunityList(int projectId, int user_id, int limit, int offset);
 }

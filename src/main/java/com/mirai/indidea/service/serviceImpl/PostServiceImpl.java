@@ -72,6 +72,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Map<String, Object>> projectCommunityList(int projectId, int limit, int offset, int userId) {
+        return postRepository.findProjectCommunityList(projectId, userId, limit, offset);
+    }
+
+    @Override
     public long likeNum(int postId) {
         return postlikeRepository.countByPostId(postId);
     }

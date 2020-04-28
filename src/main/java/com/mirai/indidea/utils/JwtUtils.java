@@ -31,10 +31,14 @@ public class JwtUtils {
 
     public static int getIdInRequest(HttpServletRequest request){
         String token = request.getHeader("token");
-        return JWT.decode(token).getClaim(USER_ID).asInt();
+        if (!token.equals(""))
+            return JWT.decode(token).getClaim(USER_ID).asInt();
+        else return 0;
     }
     public static int getAdminIdInRequest(HttpServletRequest request){
         String token = request.getHeader("token");
-        return JWT.decode(token).getClaim(ADMIN_ID).asInt();
+        if (!token.equals(""))
+            return JWT.decode(token).getClaim(ADMIN_ID).asInt();
+        else return 0;
     }
 }
