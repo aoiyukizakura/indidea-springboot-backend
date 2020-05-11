@@ -40,7 +40,11 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
     Project findProjectByIdAndStatusOrStatusOrStatus(int id, Integer status, Integer status2, Integer status3);
 
+    Project findByIdAndStatusIn(int id, Collection<Integer> status);
+
     Project findProjectByIdAndStatusOrStatusOrStatusOrStatusAndOwnerId(int id, Integer status, Integer status2, Integer status3, Integer status4, int ownerId);
+
+    Project findByIdAndOwnerIdAndStatusIn(int id, int owner_id, Collection<Integer> status);
 
     Project findProjectByIdAndStatusNotInAndOwnerId(int id, Collection<Integer> status, int owner_id);
 

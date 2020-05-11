@@ -127,14 +127,23 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project getProjectDetail(int projectId) {
-        Project p = projectRepository.findProjectByIdAndStatusOrStatusOrStatus(projectId, 1, 5, 6);
+        List<Integer> integers = new ArrayList<>();
+        integers.add(1);
+        integers.add(5);
+        integers.add(6);
+        Project p = projectRepository.findByIdAndStatusIn(projectId, integers);
         p.setHittime(p.getHittime() + 1);
         return projectRepository.saveAndFlush(p);
     }
 
     @Override
     public Project getEditProject(int projectId, int ownerId) {
-        return projectRepository.findProjectByIdAndStatusOrStatusOrStatusOrStatusAndOwnerId(projectId, 0, 2, 3, 7, ownerId);
+        List<Integer> integers = new ArrayList<>();
+        integers.add(0);
+        integers.add(2);
+        integers.add(3);
+        integers.add(7);
+        return projectRepository.findByIdAndOwnerIdAndStatusIn(projectId, ownerId, integers);
     }
 
     @Override
