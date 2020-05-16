@@ -229,4 +229,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public List<Apply> myApplyList(int user_id) {
+        return applyRepository.findAllByUserIdAndStatusNot(user_id, 1);
+    }
 }

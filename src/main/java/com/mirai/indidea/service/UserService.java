@@ -38,5 +38,7 @@ public interface UserService {
     boolean getApplyStatus(int idInRequest);
 
     boolean doApply(Integer idInRequest);
+
+    List<Apply> myApplyList(int user_id);
 }
 

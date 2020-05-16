@@ -251,6 +251,22 @@ public class UserController {
     @UserLoginToken
     @PostMapping("/doApply")
     public ResultDto<Object> doApply(HttpServletRequest request) {
-        return ResultUtils.success(userService.doApply(JwtUtils.getIdInRequest(request)));
+        try {
+            return ResultUtils.success(userService.doApply(JwtUtils.getIdInRequest(request)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.fail();
+        }
+    }
+
+    @UserLoginToken
+    @GetMapping("/myApplyList")
+    public ResultDto<Object> myApplyList(HttpServletRequest request) {
+        try {
+            return ResultUtils.success(userService.myApplyList(JwtUtils.getIdInRequest(request)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.fail();
+        }
     }
 }
